@@ -118,7 +118,6 @@ function Lounge({ setIsReady }: IProps) {
                 </button>
               ) : (
                 <button
-                  onClick={handleStartGame}
                   className="text-md text-slate-800 py-2 bg-zinc-500 w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 cursor-not-allowed transition-all"
                 >
                   START
