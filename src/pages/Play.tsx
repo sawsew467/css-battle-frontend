@@ -6,9 +6,7 @@ import Target from "../components/Target";
 import { useState } from "react";
 
 function Play() {
-    const [code, setCode] = useState<string>("");
-    
-    
+  const [code, setCode] = useState<string>("");
   return (
     <>
       <div className="flex flex-col h-[100vh] justify-between">

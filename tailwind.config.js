@@ -8,6 +8,9 @@ export default {
     extend: {
       width: {
         'slider': "var(--sliderWidth)",
+      },
+      colors: {
+        "primary": "#ffdf00"
       }
     },
   },

@@ -7,6 +7,8 @@ interface IProps {
 
 function Output({ code }: IProps) {
   const [isShow, setIsShow] = useState<boolean>(false);
+  console.log(isShow);
+
   return (
     <div className="h-full flex flex-col border-l-[1px] border-zinc-600">
       <div className="w-full bg-zinc-800 text-slate-300 text-lg h-9 flex items-center pl-4 font-bold tracking-[.25em]">
@@ -14,10 +16,12 @@ function Output({ code }: IProps) {
       </div>
       <div className="flex-1 bg-zinc-900 flex flex-col items-end">
         <div className="w-[400px] h-[300px] bg-slate-200 m-6 relative cursor-col-resize group">
-          <img
-            className={`absolute z-${isShow ? 30 : 10} top-0 left-0`}
-            src="https://cssbattle.dev/targets/1@2x.png"
-          ></img>
+          {isShow && (
+            <img
+              className="absolute z-30 top-0 left-0"
+              src="https://cssbattle.dev/targets/1@2x.png"
+            ></img>
+          )}
           <div
             className="absolute z-20 w-[400px] h-[300px] bg-white top-0 left-0"
             id="output"
