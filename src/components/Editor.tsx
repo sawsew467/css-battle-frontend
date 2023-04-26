@@ -1,7 +1,6 @@
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { html } from "@codemirror/lang-html";
 import { githubDark } from "@uiw/codemirror-theme-github";
-import { useCallback, useState } from "react";
 
 interface IProps {
   setCode: React.Dispatch<React.SetStateAction<string>>;
