@@ -2,10 +2,14 @@ import { useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
+import Login from "../components/Login";
 
 function Home() {
   const [roomCode, setRoomCode] = useState<string>("");
+  const [isShowLoginModal, setIsShowLoginModal] = useState<boolean>(false);
+
   const navigate = useNavigate();
+
   const handleEnterRoomCode = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       navigate(`/play/${roomCode}`);
@@ -17,8 +21,11 @@ function Home() {
   };
   return (
     <>
+      {isShowLoginModal && (
+        <Login setIsShowLoginModal={setIsShowLoginModal}></Login>
+      )}
       <div className="flex flex-col h-[100vh] justify-between">
-        <Header></Header>
+        <Header setIsShowLoginModal={setIsShowLoginModal}></Header>
         <div className="flex-1 flex flex-row bg-zinc-900 items-center justify-center">
           <div className="flex flex-col items-center gap-2">
             <h1 className="text-primary text-6xl font-bold tracking-[.2em]">
