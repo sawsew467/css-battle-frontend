@@ -7,7 +7,7 @@ function Target() {
       </div>
       <div className="flex-1 bg-zinc-900">
         <div className="w-[400px] h-[300px] bg-slate-200 m-6">
-          <img src="https://cssbattle.dev/targets/2@2x.png"></img>
+          <img src="https://cssbattle.dev/targets/1@2x.png"></img>
         </div>
         <div className="flex flex-col gap-3 px-6">
           <p className="text-slate-300 font-semibold">COLORS IN DESIGN</p>
