@@ -14,7 +14,7 @@ function Admin() {
                 Account Management
               </button>
             </Link>
-            <Link to="/account">
+            <Link to="/question">
               <button className="text-lg text-slate-800 py-2 bg-primary w-full rounded-md border-2 border-zinc-600 hover:bg-yellow-300 transition-all">
                 Question Management
               </button>
