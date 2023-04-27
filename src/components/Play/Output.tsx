@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Compare from "../../assets/images/output/compare.svg";
-import Loader from "../../assets/images/output/loader.svg";
 import { Img } from "react-image";
 
 interface IProps {

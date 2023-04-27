@@ -22,7 +22,6 @@ function Lounge({ setIsShowLounge }: IProps) {
   );
 
   const [isPlayable, setIsPlayable] = useState<boolean>(false);
-  const [countdown, setCountdown] = useState<number>(3);
   const [players, setPlayers] = useState<IState["Players"]>([
     {
       username: currentUser.username,
