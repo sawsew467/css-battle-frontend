@@ -4,6 +4,7 @@ export interface User {
   username: string;
   password: string;
   avatarUrl: string;
+  role: string;
 }
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
     username: "",
     password: "",
     avatarUrl: "",
+    role: "",
   },
 };
 
@@ -20,11 +22,15 @@ export const counterSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.currentUser = action.payload;
+      localStorage.setItem("currentUser", JSON.stringify(action.payload));
+    },
+    logout: () => {
+      localStorage.removeItem("currentUser");
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { login } = counterSlice.actions;
+export const { login, logout } = counterSlice.actions;
 
 export default counterSlice.reducer;

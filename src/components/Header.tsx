@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Logo from "../assets/images/header/logo.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { logout } from "../redux/slices/currentUser";
 
 interface IProps {
   setIsShowLoginModal?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,7 +19,9 @@ function Header({ setIsShowLoginModal }: IProps) {
     setIsShowLoginModal && setIsShowLoginModal(true);
     setIsShow(false);
   };
+  const dispatch = useDispatch();
   const handleLogoutClick = () => {
+    dispatch(logout());
     window.location.reload();
   };
   return (

@@ -19,6 +19,7 @@ function Login({ setIsShowLoginModal }: IProps) {
       login({
         ...input,
         avatarUrl: faker.image.avatar(),
+        role: "admin",
       })
     );
     setIsShowLoginModal(false);
@@ -46,7 +47,7 @@ function Login({ setIsShowLoginModal }: IProps) {
           <div className="flex flex-col items-start gap-4 px-4 py-8 rounded-br-lg rounded-bl-lg">
             <div className="flex flex-col gap-2 w-full">
               <p className="text-md text-slate-300 font-bold tracking-[.25em]">
-                username
+                Username
               </p>
               <input
                 onChange={(e) =>

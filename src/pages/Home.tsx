@@ -3,19 +3,33 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
 import Login from "../components/Login";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 function Home() {
+  const currentUser = useSelector(
+    (state: RootState) => state.currentUser.currentUser
+  );
+
   const [roomCode, setRoomCode] = useState<string>("");
   const [isShowLoginModal, setIsShowLoginModal] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   const handleEnterRoomCode = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!currentUser.username) {
+      setIsShowLoginModal(true);
+      return;
+    }
     if (e.code === "Enter") {
       navigate(`/play/${roomCode}`);
     }
   };
   const craeteNewRoom = () => {
+    if (!currentUser.username) {
+      setIsShowLoginModal(true);
+      return;
+    }
     const code = Math.floor(100000 + Math.random() * 900000);
     navigate(`/play/${code}`);
   };
