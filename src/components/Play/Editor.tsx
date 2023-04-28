@@ -10,7 +10,7 @@ function Editor({ setCode }: IProps) {
   return (
     <>
       <div className="flex-1 h-[calc(100vh-104px)] flex flex-col ">
-        <div className="w-full bg-zinc-800 text-slate-300 text-lg h-9 flex items-center pl-4 font-bold tracking-[.25em]">
+        <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center pl-4 font-bold tracking-[.25em]">
           EDITOR
         </div>
         <div className="flex-1 overflow-auto">

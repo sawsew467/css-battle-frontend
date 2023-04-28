@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Compare from "../../assets/images/output/compare.svg";
 import { Img } from "react-image";
+import Leaderboard from "../Leaderboard";
 
 interface IProps {
   code: string;
@@ -17,20 +18,20 @@ function Output({ code }: IProps) {
       return;
     }
     setIsLoading(true);
-    setTimeout(()=> {
+    setTimeout(() => {
       setIsLoading(false);
       setMatchPercentage(Math.floor(Math.random() * 100));
-    setIsCheck(false);
-    },1000)
+      setIsCheck(false);
+    }, 1000);
   }, [isCheck]);
   console.log(isCheck);
 
   return (
     <div className="h-full flex flex-col border-l-[1px] border-zinc-600">
-      <div className="w-full bg-zinc-800 text-slate-300 text-lg h-9 flex items-center pl-4 font-bold tracking-[.25em]">
+      <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-center gap-8 pl-4 font-bold tracking-[.25em]">
         OUTPUT
       </div>
-      <div className="flex-1 bg-zinc-900 flex flex-col items-end">
+      <div className=" bg-zinc-900 flex flex-col items-end pb-6">
         <div className="w-[400px] h-[300px] bg-slate-200 m-6 relative cursor-col-resize group">
           <Img
             className="absolute z-30 top-0 left-0 invisible"
@@ -102,11 +103,12 @@ function Output({ code }: IProps) {
               </div>
             )}
           </button>
-          <button className="w-1/2 py-2 text-slate-800 bg-primary font-medium opacity-20 cursor-not-allowed">
-            Finnish
+          <button className="w-1/2 py-2 text-slate-800 bg-primary font-medium">
+            SUBMIT
           </button>
         </div>
       </div>
+      <Leaderboard></Leaderboard>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import Editor from "../components/Play/Editor";
 import Output from "../components/Play/Output";
 import Target from "../components/Play/Target";
-import Lounge from "../components/Lounge";
+import Lounge from "../components/Room/Lounge";
 import CountdownModal from "../components/CountdownModal";
 
 function Play() {

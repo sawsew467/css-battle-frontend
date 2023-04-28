@@ -11,10 +11,12 @@ interface IProps {
 }
 
 function QuestionTable({ questionList, setQuestionList }: IProps) {
+  console.log(setQuestionList);
+
   return (
     <>
       <div className="h-full border-l-[1px] border-zinc-600">
-        <div className="w-full bg-zinc-800 text-slate-300 text-lg h-9 flex items-center justify-center gap-8 pl-4 font-bold tracking-[.25em]">
+        <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-center gap-8 pl-4 font-bold tracking-[.25em]">
           LIST OF QUESTION
         </div>
         <ul className="w-full flex flex-col h-[calc(100vh-140px)] overflow-auto">

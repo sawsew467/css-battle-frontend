@@ -10,7 +10,7 @@ function AccountTable({ acountList }: IProps) {
   return (
     <>
       <div className="w-1/2 h-full border-l-[1px] border-zinc-600">
-        <div className="w-full bg-zinc-800 text-slate-300 text-lg h-9 flex items-center gap-8 pl-4 font-bold tracking-[.25em]">
+        <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center gap-8 pl-4 font-bold tracking-[.25em]">
           <div className="w-1/12 text-end"></div>
           <div className="w-1/12 text-end"></div>
           <div className="w-1/4">USERNAME</div>
@@ -23,7 +23,7 @@ function AccountTable({ acountList }: IProps) {
               <div className="w-1/12 flex justify-center">
                 <img
                   src={account.avatarUrl}
-                  className="w-9 h-9 rounded-full"
+                  className="w-9 py-2 rounded-full"
                 ></img>
               </div>
               <div className="w-1/4">{account.username}</div>

@@ -1,13 +1,15 @@
+
 function Target() {
   return (
     <div className="h-full flex flex-col border-l-[1px] border-zinc-600">
-      <div className="w-full bg-zinc-800 text-slate-300 text-lg h-9 flex items-center justify-between px-4 ">
-        <p className="font-bold tracking-[.25em]">TARGET</p>
-        <p className="text-sm text-zinc-500">400px x 300px</p>
+      <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between px-6">
+        <p className="font-bold tracking-[.25em]">QUESTION 1</p>
+        <div className="text-green-500 font-bold">Easy</div>
       </div>
       <div className="flex-1 bg-zinc-900">
         <div className="w-[400px] h-[300px] bg-slate-200 m-6">
           <img src="https://cssbattle.dev/targets/1@2x.png"></img>
+          <p className="text-sm text-zinc-500 text-end mt-1">400px x 300px</p>
         </div>
         <div className="flex flex-col gap-3 px-6">
           <p className="text-slate-300 font-semibold">COLORS IN DESIGN</p>

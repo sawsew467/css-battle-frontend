@@ -1,7 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
+import Settings from "./Settings";
 
 interface IProps {
   setIsShowLounge: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,6 +23,7 @@ function Lounge({ setIsShowLounge }: IProps) {
   );
 
   const [isPlayable, setIsPlayable] = useState<boolean>(false);
+  const [isShowSettings, setIsShowSettings] = useState<boolean>(false);
   const [players, setPlayers] = useState<IState["Players"]>([
     {
       username: currentUser.username,
@@ -68,12 +70,16 @@ function Lounge({ setIsShowLounge }: IProps) {
 
   return (
     <>
-      <div className="w-[100vw] h-[100vh] fixed z-50 bg-overlay flex justify-center items-center  drop-shadow-2xl">
-        <div className="flex flex-col min-w-[480px] bg-zinc-900 rounded-lg">
-          <div className=" bg-zinc-800 px-4 py-2 flex justify-between items-center rounded-tl-lg rounded-tr-lg">
+      <div className="w-[100vw] h-[100vh] fixed z-50 bg-overlay flex justify-center items-center drop-shadow-2xl">
+        <div className="relative flex flex-col min-w-[480px] bg-zinc-900 rounded-lg">
+          {isShowSettings && <Settings></Settings>}
+          <div className="relative bg-zinc-800 px-4 py-2 flex justify-between items-center rounded-tl-lg rounded-tr-lg">
             <p className="text-xl text-slate-300 font-bold tracking-[.25em] text-center w-full">
               WAITING ROOM
             </p>
+            <i 
+            onClick={()=>setIsShowSettings(!isShowSettings)}
+            className="absolute right-4 text-zinc-500 hover:text-slate-300 cursor-pointer transition-all fa-solid fa-gear"></i>
           </div>
           <div className="w-full px-4 py-8 flex flex-col">
             <ul className="w-full flex flex-row">
