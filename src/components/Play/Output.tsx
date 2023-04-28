@@ -27,7 +27,7 @@ function Output({ code }: IProps) {
   console.log(isCheck);
 
   return (
-    <div className="h-full flex flex-col border-l-[1px] border-zinc-600">
+    <div className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
       <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-center gap-8 pl-4 font-bold tracking-[.25em]">
         OUTPUT
       </div>
