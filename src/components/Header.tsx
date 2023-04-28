@@ -54,7 +54,7 @@ function Header({ setIsShowLoginModal }: IProps) {
                 className=" h-[44px] w-full bg-slate-700 px-3 py-2 flex flex-row items-center gap-3 rounded-tl-md rounded-tr-md cursor-pointer hover:bg-slate-600 transition-all"
               >
                 <p className="text-white font-semibold">Management</p>
-                <i className="fa-solid fa-right-from-bracket text-slate-400"></i>
+                <i className="fa-solid fa-screwdriver-wrench text-slate-400"></i>
               </div>
               <div
                 onClick={handleLogoutClick}

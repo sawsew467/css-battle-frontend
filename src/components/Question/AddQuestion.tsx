@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TagOption from "../TagOption";
 
 interface IProps {
   questionList: {
@@ -45,7 +46,7 @@ function AddQuestion({ questionList, setQuestionList }: IProps) {
     setQuestionList([...questionList, newQuestion]);
     setImageUrl("");
     setColors([]);
-    setDifficulty("easy")
+    setDifficulty("easy");
   };
   return (
     <>
@@ -119,52 +120,10 @@ function AddQuestion({ questionList, setQuestionList }: IProps) {
                   Difficulty
                 </p>
                 <div className="flex flex-row justify-between gap-1">
-                  {difficulty === "easy" ? (
-                    <button
-                      onClick={() => setDifficulty("easy")}
-                      className="bg-green-500 text-zinc-800 font-bold text-md py-1 w-1/3 rounded-md border-2 border-green-500 hover:bg-green-500 hover:text-zinc-800 transition-all"
-                    >
-                      Easy
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setDifficulty("easy")}
-                      className="font-bold text-md text-green-500 py-1 w-1/3 rounded-md border-2 border-green-500 hover:bg-green-500 hover:text-zinc-800 transition-all"
-                    >
-                      Easy
-                    </button>
-                  )}
-
-                  {difficulty === "medium" ? (
-                    <button
-                      onClick={() => setDifficulty("medium")}
-                      className="bg-yellow-500 text-zinc-800 font-bold text-md py-1 w-1/3 rounded-md border-2 border-yellow-500 hover:bg-yellow-500 hover:text-zinc-800 transition-all"
-                    >
-                      Medium
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setDifficulty("medium")}
-                      className="font-bold text-md text-yellow-500 py-1 w-1/3 rounded-md border-2 border-yellow-500 hover:bg-yellow-500 hover:text-zinc-800 transition-all"
-                    >
-                      Medium
-                    </button>
-                  )}
-                  {difficulty === "hard" ? (
-                    <button
-                      onClick={() => setDifficulty("hard")}
-                      className="bg-red-500 text-zinc-800 font-bold text-md py-1 w-1/3 rounded-md border-2 border-red-500 hover:bg-red-500 hover:text-zinc-800 transition-all"
-                    >
-                      Hard
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setDifficulty("hard")}
-                      className="font-bold text-md text-red-500 py-1 w-1/3 rounded-md border-2 border-red-500 hover:bg-red-500 hover:text-zinc-800 transition-all"
-                    >
-                      Hard
-                    </button>
-                  )}
+                  <TagOption
+                    difficulty={difficulty}
+                    setDifficulty={setDifficulty}
+                  ></TagOption>
                 </div>
               </div>
             </div>
