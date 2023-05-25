@@ -1,22 +1,13 @@
 import { useState } from "react";
 import TagOption from "../TagOption";
-
-interface IProps {
-  questionList: {
-    imageUrl: string;
-    difficulty: "easy" | "medium" | "hard";
-    colors: string[];
-  }[];
-  setQuestionList: React.Dispatch<React.SetStateAction<IProps["questionList"]>>;
-}
-
+import { addOneQuestion } from "../../apis/question";
 interface IState {
   difficulty: "easy" | "medium" | "hard";
   color: string;
   colors: IState["color"][];
 }
 
-function AddQuestion({ questionList, setQuestionList }: IProps) {
+function AddQuestion() {
   const [imageUrl, setImageUrl] = useState<string>("");
   const [colors, setColors] = useState<IState["colors"]>([]);
   const [difficulty, setDifficulty] = useState<IState["difficulty"]>("easy");
@@ -37,16 +28,22 @@ function AddQuestion({ questionList, setQuestionList }: IProps) {
       colors.map((color, index) => (index === pos ? e.target.value : color))
     );
   };
-  const handleAddQuestion = () => {
+  const handleAddQuestion = async () => {
+    const access_token = localStorage.getItem("access_token");
     const newQuestion = {
       imageUrl,
       colors,
       difficulty,
     };
-    setQuestionList([...questionList, newQuestion]);
+    await addOneQuestion(newQuestion, access_token);
     setImageUrl("");
     setColors([]);
     setDifficulty("easy");
+  };
+  const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleAddColor();
+    }
   };
   return (
     <>
@@ -106,6 +103,7 @@ function AddQuestion({ questionList, setQuestionList }: IProps) {
                       type="text"
                       value={newColor}
                       onChange={(e) => setNewColor(e.target.value)}
+                      onKeyDown={(e) => handleEnterPress(e)}
                       className="w-[92px] outline-none bg-black border-2 border-zinc-600 text-slate-300 px-2 py-1 rounded-md text-md"
                     ></input>
                     <i

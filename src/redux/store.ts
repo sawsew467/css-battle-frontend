@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import currentUser from "./slices/currentUser";
+import room from "./slices/room";
 
 export const store = configureStore({
   reducer: {
     currentUser: currentUser,
+    room: room,
   },
 });
 

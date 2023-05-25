@@ -1,13 +1,13 @@
-import { useState } from "react";
+interface IProps {
+  options: {
+    numOfEasy: number;
+    numOfMedium: number;
+    numOfHard: number;
+  };
+  setOptions: React.Dispatch<React.SetStateAction<IProps["options"]>>;
+}
 
-function Settings() {
-  const [options, setOptions] = useState({
-    easyNumber: 2,
-    mediumNumber: 2,
-    hardNumber: 1,
-  });
-  console.log(setOptions);
-  
+function Settings({ options, setOptions }: IProps) {
   return (
     <div className="absolute left-full min-h-[200px] ml-4 bg-zinc-900 rounded-md drop-shadow-2xl">
       <div className="relative bg-zinc-800 px-4 py-2 flex justify-between items-center rounded-tl-lg rounded-tr-lg">
@@ -23,8 +23,10 @@ function Settings() {
           <div className="flex flex-col w-[100px]">
             <p className="text-slate-300 mb-1">Easy</p>
             <input
-              value={options.easyNumber}
-              //   onChange={(e) => handleChangeColor(e, index)}
+              value={options.numOfEasy}
+              onChange={(e) =>
+                setOptions({ ...options, numOfEasy: +e.target.value })
+              }
               type="text"
               className="w-[full] outline-none bg-black border-2 border-zinc-600 text-slate-300 px-2 py-1 rounded-md text-md"
             ></input>
@@ -32,8 +34,10 @@ function Settings() {
           <div className="flex flex-col w-[100px]">
             <p className="text-slate-300 mb-1">Medium</p>
             <input
-              value={options.mediumNumber}
-              //   onChange={(e) => handleChangeColor(e, index)}
+              value={options.numOfMedium}
+              onChange={(e) =>
+                setOptions({ ...options, numOfMedium: +e.target.value })
+              }
               type="text"
               className="w-[full] outline-none bg-black border-2 border-zinc-600 text-slate-300 px-2 py-1 rounded-md text-md"
             ></input>
@@ -41,8 +45,10 @@ function Settings() {
           <div className="flex flex-col w-[100px]">
             <p className="text-slate-300 mb-1">Hard</p>
             <input
-              value={options.hardNumber}
-              //   onChange={(e) => handleChangeColor(e, index)}
+              value={options.numOfHard}
+              onChange={(e) =>
+                setOptions({ ...options, numOfHard: +e.target.value })
+              }
               type="text"
               className="w-[full] outline-none bg-black border-2 border-zinc-600 text-slate-300 px-2 py-1 rounded-md text-md"
             ></input>

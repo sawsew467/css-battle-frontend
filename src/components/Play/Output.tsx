@@ -2,12 +2,42 @@ import { useEffect, useState } from "react";
 import Compare from "../../assets/images/output/compare.svg";
 import { Img } from "react-image";
 import Leaderboard from "../Leaderboard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import {
+  decreaseTimer,
+  increaseQuestionIndex,
+  resetTimer,
+} from "../../redux/slices/room";
+import { finnishGame, submitQuestion } from "../../apis/room";
 
 interface IProps {
   code: string;
 }
 
 function Output({ code }: IProps) {
+  const room = useSelector((state: RootState) => state.room.room);
+  const questionIndex = useSelector(
+    (state: RootState) => state.room.questionIndex
+  );
+  const questionList = useSelector(
+    (state: RootState) => state.room.questionList
+  );
+  const timer = useSelector((state: RootState) => state.room.timer);
+  const isPlaying = useSelector((state: RootState) => state.room.isPlaying);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (isPlaying) {
+      const countdown = setInterval(() => {
+        dispatch(decreaseTimer(timer - 1));
+      }, 1000);
+      return () => clearInterval(countdown);
+    }
+  }, [dispatch, timer, questionIndex, isPlaying]);
+
+  const currentQuestion = questionList[questionIndex];
+
   const [isShow, setIsShow] = useState<boolean>(false);
   const [isCheck, setIsCheck] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -24,27 +54,53 @@ function Output({ code }: IProps) {
       setIsCheck(false);
     }, 1000);
   }, [isCheck]);
-  console.log(isCheck);
-
+  useEffect(() => {
+    if (timer === 0) {
+      handleSubmit();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timer]);
+  const handleSubmit = async () => {
+    const access_token = localStorage.getItem("access_token");
+    const body = {
+      result: {
+        questionId: currentQuestion.id,
+        point: matchPercentage,
+        time: 600 - timer,
+      },
+      roomCode: room.roomCode,
+    };
+    await submitQuestion(body, access_token);
+    dispatch(increaseQuestionIndex());
+    dispatch(resetTimer());
+    if (questionIndex === questionList.length - 1) {
+      handleFinnish();
+    }
+    // dispatch(changePaticipantStatus("SUBMITTED"));
+  };
+  const handleFinnish = async () => {
+    const access_token = localStorage.getItem("access_token");
+    const roomCode: string = room.roomCode;
+    const res = await finnishGame(roomCode, access_token);
+    console.log("~~~");
+    console.log(res);
+  };
   return (
     <div className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
-      <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-center gap-8 pl-4 font-bold tracking-[.25em]">
-        OUTPUT
+      <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between gap-8 px-6 font-bold ">
+        <p className="tracking-[.25em]">OUTPUT</p>
+        <p className="text-red-500">{timer}s</p>
       </div>
       <div className=" bg-zinc-900 flex flex-col items-end pb-6">
         <div className="w-[400px] h-[300px] bg-slate-200 m-6 relative cursor-col-resize group">
           <Img
             className="absolute z-30 top-0 left-0 invisible"
-            src="https://cssbattle.dev/targets/1@2x.png"
-          ></Img>
-          <Img
-            className="absolute z-30 top-0 left-0 invisible"
-            src="https://cssbattle.dev/targets/1@2x.png"
+            src={currentQuestion?.imageUrl}
           ></Img>
           {isShow && (
             <Img
               className="absolute z-30 top-0 left-0"
-              src="https://cssbattle.dev/targets/1@2x.png"
+              src={currentQuestion?.imageUrl}
             ></Img>
           )}
           <div
@@ -103,7 +159,10 @@ function Output({ code }: IProps) {
               </div>
             )}
           </button>
-          <button className="w-1/2 py-2 text-slate-800 bg-primary font-medium">
+          <button
+            onClick={handleSubmit}
+            className="w-1/2 py-2 text-slate-800 bg-primary font-medium"
+          >
             SUBMIT
           </button>
         </div>

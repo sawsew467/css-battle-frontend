@@ -7,9 +7,10 @@ import { useNavigate } from "react-router";
 
 interface IProps {
   setIsShowLoginModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsShowRegisterModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Header({ setIsShowLoginModal }: IProps) {
+function Header({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
   const currentUser = useSelector(
     (state: RootState) => state.currentUser.currentUser
   );
@@ -18,6 +19,10 @@ function Header({ setIsShowLoginModal }: IProps) {
 
   const handleLoginClick = () => {
     setIsShowLoginModal && setIsShowLoginModal(true);
+    setIsShow(false);
+  };
+  const handleRegisterClick = () => {
+    setIsShowRegisterModal && setIsShowRegisterModal(true);
     setIsShow(false);
   };
   const dispatch = useDispatch();
@@ -67,12 +72,22 @@ function Header({ setIsShowLoginModal }: IProps) {
           )}
         </div>
       ) : (
-        <div
-          className="relative z-30 bg-slate-700 px-3 py-2 flex flex-row items-center gap-3 rounded-md cursor-pointer hover:bg-slate-600 transition-all"
-          onClick={handleLoginClick}
-        >
-          <p className="text-white font-semibold">Log in</p>
-        </div>
+        <>
+          <div className="flex flex-row gap-4">
+            <button
+              className="relative z-3 px-3 py-2 flex flex-row items-center gap-3 rounded-md cursor-pointer transition-all"
+              onClick={handleLoginClick}
+            >
+              <p className="text-primary font-semibold">Log in</p>
+            </button>
+            <button
+              className="relative z-30 bg-primary px-3 py-2 flex flex-row items-center gap-3 rounded-md cursor-pointer hover:bg-yellow-300 transition-all"
+              onClick={handleRegisterClick}
+            >
+              <p className="text-zinc-800 font-semibold">Register</p>
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

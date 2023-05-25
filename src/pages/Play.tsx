@@ -6,18 +6,30 @@ import Output from "../components/Play/Output";
 import Target from "../components/Play/Target";
 import Lounge from "../components/Room/Lounge";
 import CountdownModal from "../components/CountdownModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import Summary from "../components/Summary";
 
 function Play() {
+  const roomStatus = useSelector((state: RootState) => state.room.status);
+  const questionList = useSelector(
+    (state: RootState) => state.room.questionList
+  );
+  const questionIndex = useSelector(
+    (state: RootState) => state.room.questionIndex
+  );
+
   const [code, setCode] = useState<string>("");
-  const [isShowLounge, setIsShowLounge] = useState<boolean>(true);
   const [isShowCoundown, setIsShowCoundown] = useState<boolean>(false);
 
   useEffect(() => {
-    !isShowLounge && setIsShowCoundown(true);
-  }, [isShowLounge]);
+    questionList.length > 0 && setIsShowCoundown(true);
+  }, [questionList]);
   return (
     <>
-      {isShowLounge && <Lounge setIsShowLounge={setIsShowLounge}></Lounge>}
+      {questionIndex === questionList.length && <Summary></Summary>}
+      {/* {participantStatus === "SUBMITTED" && <RoundResult></RoundResult>} */}
+      {roomStatus === "OPEN" && <Lounge></Lounge>}
       {isShowCoundown && (
         <CountdownModal setIsShowCoundown={setIsShowCoundown}></CountdownModal>
       )}

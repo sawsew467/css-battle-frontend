@@ -16,11 +16,10 @@ function Tag({ setDifficulty, difficulty }: IProps) {
           Easy
         </button>
       )}
-
       {difficulty === "medium" && (
         <button
           onClick={() => setDifficulty("medium")}
-          className="font-bold text-md text-yellow-500 py-1 w-1/3 rounded-md border-2 border-yellow-500 hover:bg-yellow-500 hover:text-zinc-800 transition-all"
+          className="font-bold text-md text-yellow-500 py-1 w-full rounded-md border-2 border-yellow-500 hover:bg-yellow-500 hover:text-zinc-800 transition-all"
         >
           Medium
         </button>

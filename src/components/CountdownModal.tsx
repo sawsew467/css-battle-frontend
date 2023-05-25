@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { changeIsPlaying, increaseQuestionIndex } from "../redux/slices/room";
 
 interface IProps {
   setIsShowCoundown: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,9 +15,17 @@ function CountdownModal({ setIsShowCoundown }: IProps) {
     }, 1000);
     return () => clearInterval(countdown);
   }, []);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    !counter && setIsShowCoundown(false);
-  }, [counter, setIsShowCoundown]);
+    if (!counter) {
+      setIsShowCoundown(false);
+      dispatch(increaseQuestionIndex());
+      dispatch(changeIsPlaying(true));
+    }
+    // !counter && setIsShowCoundown(false);
+  }, [counter, dispatch, setIsShowCoundown]);
 
   return (
     <>

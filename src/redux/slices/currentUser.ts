@@ -9,10 +9,17 @@ export interface User {
 
 const initialState = {
   currentUser: {
+    id: "",
     username: "",
-    password: "",
     avatarUrl: "",
     role: "",
+    createAt: "",
+    updateAp: "",
+  },
+  participant: {
+    role: "",
+    roomCode: "",
+    status: "DOING",
   },
 };
 
@@ -22,15 +29,28 @@ export const counterSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.currentUser = action.payload;
-      localStorage.setItem("currentUser", JSON.stringify(action.payload));
+      localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
+      localStorage.setItem("access_token", action.payload?.access_token);
+      localStorage.setItem("refresh_token", action.payload?.refresh_token);
     },
     logout: () => {
       localStorage.removeItem("currentUser");
+    },
+    joinRoom: (state, action) => {
+      state.participant.role = "GUEST";
+      state.participant.roomCode = action.payload;
+    },
+    createRoom: (state, action) => {
+      state.participant.role = "HOST";
+      state.participant.roomCode = action.payload;
+    },
+    changePaticipantStatus: (state, action) => {
+      state.participant.status = action.payload
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { login, logout } = counterSlice.actions;
+export const { login, logout, createRoom, joinRoom, changePaticipantStatus } = counterSlice.actions;
 
 export default counterSlice.reducer;
