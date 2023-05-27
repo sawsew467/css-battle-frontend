@@ -35,8 +35,8 @@ export interface RoomIState {
     username: string;
   }[];
   summary: {
-    totalPoints: number;
-    totalTime: number;
+    point: number;
+    time: number;
     username: string;
   }[];
   init: {

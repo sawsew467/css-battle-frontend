@@ -28,11 +28,10 @@ function Play() {
   return (
     <>
       {questionIndex === questionList.length && <Summary></Summary>}
-      {/* {participantStatus === "SUBMITTED" && <RoundResult></RoundResult>} */}
-      {roomStatus === "OPEN" && <Lounge></Lounge>}
       {isShowCoundown && (
         <CountdownModal setIsShowCoundown={setIsShowCoundown}></CountdownModal>
       )}
+      {roomStatus === "OPEN" && <Lounge></Lounge>}
       <div className="flex flex-col h-[100vh] justify-between">
         <Header></Header>
         <div className="flex-1 flex flex-row">

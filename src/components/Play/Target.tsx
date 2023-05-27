@@ -23,6 +23,10 @@ function Target() {
         return "#22c55e";
     }
   };
+
+  const handleColorCopy = (color:string)=> {
+    navigator.clipboard.writeText(color);
+  }
   return (
     <div className="h-full flex flex-col border-l-[1px] border-zinc-600">
       <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between px-6">
@@ -51,6 +55,7 @@ function Target() {
                 <li
                   key={index}
                   className="w-1/2 flex items-center gap-2 cursor-pointer"
+                  onClick={() => handleColorCopy(color)}
                 >
                   <div
                     style={{

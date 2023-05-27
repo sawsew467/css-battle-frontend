@@ -35,6 +35,7 @@ function Lounge() {
   const [isShowSettings, setIsShowSettings] = useState<boolean>(false);
   const [players, setPlayers] = useState<RoomIState["paticipants"]>([]);
   const [emptyLounge, setEmptyLounge] = useState<number[]>();
+
   useEffect(() => {
     setPlayers(room.participants);
   }, [room]);
@@ -77,22 +78,32 @@ function Lounge() {
     const access_token = localStorage.getItem("access_token");
     const body = {
       roomCode: room.roomCode,
-      options: options
-    }
+      options: options,
+    };
     await handleReady();
     await startGame(body, access_token);
   };
+
+  const isReadyAllParticipants = () => {
+    for (let i = 1; i < players.length; i++) {
+      if (players[i]?.status === "WAITING") {
+        return false;
+      }
+    }
+    return true;
+  };
+  console.log(isReadyAllParticipants());
 
   return (
     <>
       <div className="w-[100vw] h-[100vh] fixed z-50 bg-overlay flex justify-center items-center drop-shadow-2xl">
         <div className="relative flex flex-col min-w-[480px] bg-zinc-900 rounded-lg">
-          {isShowSettings && <Settings setOptions={setOptions} options={options}></Settings>}
+          {isShowSettings && (
+            <Settings setOptions={setOptions} options={options}></Settings>
+          )}
           <div className="relative bg-zinc-800 px-4 py-2 flex justify-between items-center rounded-tl-lg rounded-tr-lg">
             <p className="text-xl text-slate-300 font-bold text-center w-full">
-              {
-                `ROOM CODE: ${room.roomCode}`
-              }
+              {`ROOM CODE: ${room.roomCode}`}
             </p>
             <i
               onClick={() => setIsShowSettings(!isShowSettings)}
@@ -135,7 +146,6 @@ function Lounge() {
                 <li
                   key={value}
                   className="flex flex-col items-center gap-2 w-1/5"
-                  // onClick={() => handleChangePlayerStatus(index)}
                 >
                   <img
                     className="w-12 h-12 rounded-md"
@@ -164,7 +174,13 @@ function Lounge() {
                 </button>
               ))}
             {participant.role === "HOST" &&
-              (!isReady ? (
+              (isReadyAllParticipants() === false ? (
+                <button
+                  className="text-md text-slate-800 py-2 bg-zinc-500 w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 transition-all"
+                >
+                  Waiting for all ready
+                </button>
+              ) : !isReady ? (
                 <button
                   onClick={handleStartGame}
                   className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-yellow-300 transition-all"
@@ -172,11 +188,8 @@ function Lounge() {
                   START GAME
                 </button>
               ) : (
-                <button
-                  onClick={handleCancel}
-                  className="text-md text-slate-800 py-2 bg-zinc-500 w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 transition-all"
-                >
-                  CANCEL
+                <button className="relative w-4/5 h-11 mt-4 mx-auto text-zinc-800 font-bold bg-zinc-500 border-none py-2 rounded-md transition-all">
+                  <span className="absolute top-2 right-[calc(50%-12px)] loader"></span>
                 </button>
               ))}
           </div>

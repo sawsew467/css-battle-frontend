@@ -20,7 +20,7 @@ function Summary() {
             <ul className="flex flex-col gap-2">
               {leaderdoard?.map((roundResult, index) =>
                 roundResult[0]?.time !== 0 ? (
-                  <li>
+                  <li key={index}>
                     <div className="mb-1 underline font-bold text-lg text-slate-300">
                       Question {index + 1}:
                     </div>
@@ -33,7 +33,7 @@ function Summary() {
                         <th className="w-1/3 py-1 px-2 text-start">Time</th>
                       </tr>
                       {roundResult.map((user) => (
-                        <tr className="flex flex-row border-2 border-t-0">
+                        <tr key={user.username} className="flex flex-row border-2 border-t-0">
                           <td className="w-1/3 py-1 px-2">{user?.username}</td>
                           <td className="w-1/3 py-1 px-2 border-x-2">
                             {user?.time > 0 ? user?.point : "- - -"}
@@ -62,13 +62,13 @@ function Summary() {
                     <th className="w-1/3 py-1 px-2 text-start">Time</th>
                   </tr>
                   {summary?.map((user) => (
-                    <tr className="flex flex-row border-2 border-t-0">
+                    <tr key={user.username} className="flex flex-row border-2 border-t-0">
                       <td className="w-1/3 py-1 px-2">{user?.username}</td>
                       <td className="w-1/3 py-1 px-2 border-x-2">
-                        {user?.totalTime > 0 ? user?.totalPoints : "- - -"}
+                        {user?.time > 0 ? user?.point : "- - -"}
                       </td>
                       <td className="w-1/3 py-1 px-2">
-                        {user?.totalTime > 0 ? `${user?.totalTime}s` : "- - -"}
+                        {user?.time > 0 ? `${user?.time}s` : "- - -"}
                       </td>
                     </tr>
                   ))}

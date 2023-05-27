@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import currentUser from "./slices/currentUser";
 import room from "./slices/room";
+import app from "./slices/app";
 
 export const store = configureStore({
   reducer: {
     currentUser: currentUser,
     room: room,
+    app: app
   },
 });
 

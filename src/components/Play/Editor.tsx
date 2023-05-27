@@ -6,6 +6,15 @@ interface IProps {
   setCode: React.Dispatch<React.SetStateAction<string>>;
 }
 
+const defaultValue = `<div></div>
+<style>
+div {
+  width: 100px;
+  height: 100px;
+  background: #dd6b4d;
+}
+</style>`;
+
 function Editor({ setCode }: IProps) {
   return (
     <>
@@ -20,6 +29,7 @@ function Editor({ setCode }: IProps) {
             width="100%"
             height="100%"
             onChange={(val) => setCode(val)}
+            value={defaultValue}
           />
         </div>
       </div>

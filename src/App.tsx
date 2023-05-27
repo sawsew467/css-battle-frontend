@@ -53,9 +53,15 @@ function App() {
   channel.subscribe("playerFinished", (message) => {
     const summary = message.data.summary;
     console.log("!!!");
+    console.log(message.data);
+    console.log("summary");
     console.log(summary);
     
     dispatch(updateSummary(summary));
+    const leaderboardUpdated = message.data.leaderboard;
+    console.log(message);
+    
+    dispatch(updateLeaderboard(leaderboardUpdated));
   });
   // channel.subscribe("gameFinished", (message) => {
   //   const summary = message;

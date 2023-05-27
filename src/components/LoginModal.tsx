@@ -124,7 +124,6 @@ function LoginModal({
             <div className="flex flex-col w-full items-center">
               {isLoading ? (
                 <button className="relative w-full h-10 text-zinc-800 font-bold bg-zinc-500 border-none py-2 rounded-md transition-all">
-                  {/* <p>LOGIN</p> */}
                   <span className="absolute top-2 right-[calc(50%-12px)] loader"></span>
                 </button>
               ) : (

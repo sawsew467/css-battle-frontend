@@ -18,7 +18,7 @@ function AccountTable({ acountList }: IProps) {
         </div>
         <ul className="w-full flex flex-col h-[calc(100vh-140px)] overflow-auto">
           {acountList.map((account, index) => (
-            <li className="w-full text-slate-300 text-md flex items-center gap-8 pl-4 py-2 font-bold border-b-2 border-zinc-800">
+            <li key={account.username} className="w-full text-slate-300 text-md flex items-center gap-8 pl-4 py-2 font-bold border-b-2 border-zinc-800">
               <div className="w-1/12 text-end">{index + 1}</div>
               <div className="w-1/12 flex justify-center">
                 <img

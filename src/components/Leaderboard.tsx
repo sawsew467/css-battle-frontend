@@ -12,7 +12,7 @@ function Leaderboard() {
         <div className="bg-zinc-900 text-slate-300 p-6 min-h-[calc(100vh-623px)]">
           <ul className="flex flex-col gap-2">
             {leaderdoard.map((roundResult, index) => roundResult[0]?.time !== 0 ? (
-              <li>
+              <li key={index}>
                 <div className="mb-1 underline font-bold text-lg">
                   Question {index + 1}:
                 </div>
@@ -25,7 +25,7 @@ function Leaderboard() {
                     <th className="w-1/3 py-1 px-2 text-start">Time</th>
                   </tr>
                   {roundResult.map((user) => (
-                    <tr className="flex flex-row border-2 border-t-0">
+                    <tr key={user.username} className="flex flex-row border-2 border-t-0">
                       <td className="w-1/3 py-1 px-2">{user?.username}</td>
                       <td className="w-1/3 py-1 px-2 border-x-2">
                         {user?.time > 0 ? user?.point : "- - -"}

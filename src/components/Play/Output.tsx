@@ -41,6 +41,7 @@ function Output({ code }: IProps) {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [isCheck, setIsCheck] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [matchPercentage, setMatchPercentage] = useState<number>(0);
 
   useEffect(() => {
@@ -61,6 +62,10 @@ function Output({ code }: IProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer]);
   const handleSubmit = async () => {
+    if (timer === 600) {
+      return;
+    }
+    setIsSubmitting(true);
     const access_token = localStorage.getItem("access_token");
     const body = {
       result: {
@@ -73,18 +78,10 @@ function Output({ code }: IProps) {
     await submitQuestion(body, access_token);
     dispatch(increaseQuestionIndex());
     dispatch(resetTimer());
-    if (questionIndex === questionList.length - 1) {
-      handleFinnish();
-    }
-    // dispatch(changePaticipantStatus("SUBMITTED"));
+    setIsSubmitting(false);
   };
-  const handleFinnish = async () => {
-    const access_token = localStorage.getItem("access_token");
-    const roomCode: string = room.roomCode;
-    const res = await finnishGame(roomCode, access_token);
-    console.log("~~~");
-    console.log(res);
-  };
+
+  
   return (
     <div className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
       <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between gap-8 px-6 font-bold ">
@@ -129,15 +126,15 @@ function Output({ code }: IProps) {
           </p>
         </div>
         <div className="px-6 mt-2 flex justify-between gap-2 w-full">
-          <button
-            className="relative w-1/2 py-2 text-primary border-2 border-primary font-medium hover:bg-zinc-800 transition-all"
-            onClick={() => setIsCheck(true)}
-          >
-            Check
-            {isLoading && (
-              <div className="absolute top-[10px] right-6">
+          {isLoading ? (
+            <button
+              className="relative w-1/2 h-11 py-2 flex justify-center items-center text-primary border-2 border-primary font-medium hover:bg-zinc-800 transition-all"
+              onClick={() => setIsCheck(true)}
+            >
+              {" "}
+              <div className="">
                 <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  className="animate-spin  h-5 w-5 text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -157,14 +154,28 @@ function Output({ code }: IProps) {
                   ></path>
                 </svg>
               </div>
-            )}
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="w-1/2 py-2 text-slate-800 bg-primary font-medium"
-          >
-            SUBMIT
-          </button>
+            </button>
+          ) : (
+            <button
+              className="relative w-1/2 py-2 text-primary border-2 border-primary font-medium hover:bg-zinc-800 transition-all"
+              onClick={() => setIsCheck(true)}
+            >
+              {" "}
+              Check
+            </button>
+          )}
+          {isSubmitting ? (
+            <button className="relative w-1/2 py-2 text-zinc-800 bg-zinc-500">
+              <span className="absolute top-2 right-[calc(50%-12px)] loader"></span>
+            </button>
+          ) : (
+            <button
+              onClick={handleSubmit}
+              className="w-1/2 py-2 text-slate-800 bg-primary font-medium hover:bg-yellow-300 transition-all"
+            >
+              SUBMIT
+            </button>
+          )}
         </div>
       </div>
       <Leaderboard></Leaderboard>

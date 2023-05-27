@@ -12,6 +12,8 @@ import { createNewRoom, joinInRoom } from "../apis/room";
 import { ably } from "../App";
 import { RoomIState, update } from "../redux/slices/room";
 import { createRoom, joinRoom } from "../redux/slices/currentUser";
+import { changeLoadingStatus } from "../redux/slices/app";
+import LoadingModal from "../components/LoadingModal";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -27,6 +29,9 @@ interface IProps {
 function Home({ setRoomCodeApp }: IProps) {
   const currentUser = useSelector(
     (state: RootState) => state.currentUser.currentUser
+  );
+  const pageLoading = useSelector(
+    (state: RootState) => state.app.pageLoading.status
   );
 
   const [roomCode, setRoomCode] = useState<string>("");
@@ -44,7 +49,9 @@ function Home({ setRoomCodeApp }: IProps) {
       setIsShowLoginModal(true);
       return;
     }
+
     if (e.code === "Enter") {
+      dispatch(changeLoadingStatus(true));
       const access_token = localStorage.getItem("access_token");
       if (access_token) {
         const response = await joinInRoom(roomCode, access_token);
@@ -53,8 +60,8 @@ function Home({ setRoomCodeApp }: IProps) {
         dispatch(joinRoom(room.roomCode));
         ably.channels.get(roomCode);
         setRoomCodeApp(room.roomCode);
-        navigate(`/play/${roomCode}`);
       }
+      dispatch(changeLoadingStatus(true));
       navigate(`/play/${roomCode}`);
     }
   };
@@ -63,6 +70,7 @@ function Home({ setRoomCodeApp }: IProps) {
       setIsShowLoginModal(true);
       return;
     }
+    dispatch(changeLoadingStatus(true));
     const access_token = localStorage.getItem("access_token");
     if (access_token) {
       const response = await createNewRoom(access_token);
@@ -72,6 +80,7 @@ function Home({ setRoomCodeApp }: IProps) {
       const roomCode = response.data.data.data.room.roomCode;
       setRoomCodeApp(roomCode);
       ably.channels.get(roomCode);
+      dispatch(changeLoadingStatus(false));
       navigate(`/play/${roomCode}`);
     }
   };
@@ -105,6 +114,7 @@ function Home({ setRoomCodeApp }: IProps) {
           setOpen={setOpen}
         ></RegisterModal>
       )}
+      {pageLoading && <LoadingModal></LoadingModal>}
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={open}

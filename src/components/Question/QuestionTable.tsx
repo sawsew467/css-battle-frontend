@@ -25,7 +25,7 @@ function QuestionTable({ questionList }: IProps) {
         </div>
         <ul className="w-full flex flex-col h-[calc(100vh-140px)] overflow-auto">
           {questionList.map((question) => (
-            <li className="w-full text-slate-300 text-md flex gap-4 px-4 py-4 font-bold border-b-2 border-zinc-800">
+            <li key={question.id} className="w-full text-slate-300 text-md flex gap-4 px-4 py-4 font-bold border-b-2 border-zinc-800">
               <div className="w-2/12 flex flex-col items-center">
                 <Tag
                   difficulty={question.difficulty}
@@ -49,8 +49,8 @@ function QuestionTable({ questionList }: IProps) {
                   </p>
                   <div className="bg-black p-4 rounded-md">
                     <ul className="w-full h-full flex flex-row flex-wrap gap-y-4">
-                      {question.colors.map((color) => (
-                        <li className="w-1/2 flex items-center gap-2 cursor-pointer">
+                      {question.colors.map((color, index) => (
+                        <li key={index} className="w-1/2 flex items-center gap-2 cursor-pointer">
                           <div
                             className="w-6 h-6 rounded-full border-2 border-zinc-200"
                             style={{
