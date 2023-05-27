@@ -9,7 +9,7 @@ import {
   increaseQuestionIndex,
   resetTimer,
 } from "../../redux/slices/room";
-import { finnishGame, submitQuestion } from "../../apis/room";
+import { submitQuestion } from "../../apis/room";
 
 interface IProps {
   code: string;
