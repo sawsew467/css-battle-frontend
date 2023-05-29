@@ -5,20 +5,14 @@ import { loginAccount } from "../apis/auth";
 import { Validationschema } from "../utils/yupValidation";
 import { ValidationError } from "yup";
 import axios from "axios";
+import { showSnackbar } from "../redux/slices/app";
 
 interface IProps {
   setIsShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
   setIsShowRegisterModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrMessage: React.Dispatch<React.SetStateAction<string>>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function LoginModal({
-  setIsShowLoginModal,
-  setIsShowRegisterModal,
-  setErrMessage,
-  setOpen,
-}: IProps) {
+function LoginModal({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -42,27 +36,43 @@ function LoginModal({
           refresh_token: token.refreshToken,
         })
       );
-      setTimeout(() => {
+      // setTimeout(() => {
         setIsLoading(false);
         setIsShowLoginModal(false);
-      }, 500);
+        dispatch(
+          showSnackbar({
+            open: true,
+            message: "Login successfully!",
+            type: "success",
+          })
+        );
+      // }, 500);
     } catch (error: unknown) {
       if (error instanceof ValidationError) {
         if (error?.name === "ValidationError") {
-          setErrMessage(error.errors[0]);
-          setOpen(true);
+          dispatch(
+            showSnackbar({
+              open: true,
+              message: error.errors[0],
+              type: "error",
+            })
+          );
         }
       }
       if (axios.isAxiosError(error)) {
         console.log(error);
-
         if (
           error.response?.status === 401 ||
           error.response?.status === 404 ||
           error.response?.status === 400
         ) {
-          setErrMessage("Username or password is incorrect!!!");
-          setOpen(true);
+          dispatch(
+            showSnackbar({
+              open: true,
+              message: "Username or password is incorrect!!!",
+              type: "error",
+            })
+          );
         }
       }
       setTimeout(() => {
@@ -130,7 +140,7 @@ function LoginModal({
                 <button
                   onClick={(e) => handleLogin(e)}
                   type="submit"
-                  className="relative w-full text-zinc-800 font-bold bg-primary border-none py-2 rounded-md hover:bg-yellow-300 transition-all"
+                  className="relative w-full text-zinc-800 font-bold bg-primary border-none py-2 rounded-md hover:bg-blue-400 transition-all"
                 >
                   <p>LOGIN</p>
                 </button>

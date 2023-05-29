@@ -92,8 +92,6 @@ function Lounge() {
     }
     return true;
   };
-  console.log(isReadyAllParticipants());
-
   return (
     <>
       <div className="w-[100vw] h-[100vh] fixed z-50 bg-overlay flex justify-center items-center drop-shadow-2xl">
@@ -161,7 +159,7 @@ function Lounge() {
               (!isReady ? (
                 <button
                   onClick={handleReady}
-                  className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-yellow-300 transition-all"
+                  className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-blue-400 transition-all"
                 >
                   READY
                 </button>
@@ -183,7 +181,7 @@ function Lounge() {
               ) : !isReady ? (
                 <button
                   onClick={handleStartGame}
-                  className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-yellow-300 transition-all"
+                  className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-blue-400 transition-all"
                 >
                   START GAME
                 </button>

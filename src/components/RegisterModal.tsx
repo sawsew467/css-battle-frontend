@@ -5,19 +5,16 @@ import { login } from "../redux/slices/currentUser";
 import { Validationschema } from "../utils/yupValidation";
 import { ValidationError } from "yup";
 import axios from "axios";
+import { showSnackbar } from "../redux/slices/app";
 
 interface IProps {
   setIsShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
   setIsShowRegisterModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrMessage: React.Dispatch<React.SetStateAction<string>>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function RegisterModal({
   setIsShowRegisterModal,
   setIsShowLoginModal,
-  setErrMessage,
-  setOpen,
 }: IProps) {
   const dispatch = useDispatch();
 
@@ -45,19 +42,35 @@ function RegisterModal({
         })
       );
       setIsShowRegisterModal(false);
+      dispatch(
+        showSnackbar({
+          open: true,
+          message: "Register successfully!",
+          type: "success",
+        })
+      );
     } catch (error) {
       if (error instanceof ValidationError) {
         if (error?.name === "ValidationError") {
-          setErrMessage(error.errors[0]);
-          setOpen(true);
+          dispatch(
+            showSnackbar({
+              open: true,
+              message: error.errors[0],
+              type: "error",
+            })
+          );
         }
       }
       if (axios.isAxiosError(error)) {
         console.log(error.response?.data.message);
-        
         if (error.response?.status === 409) {
-          setErrMessage("User already exists!!!");
-          setOpen(true);
+          dispatch(
+            showSnackbar({
+              open: true,
+              message: "Username or password is incorrect!!!",
+              type: "error",
+            })
+          );
         }
       }
     } finally {
@@ -138,7 +151,7 @@ function RegisterModal({
                 <button
                   type="submit"
                   onClick={(e) => handleRegister(e)}
-                  className="relative w-full text-zinc-800 font-bold bg-primary border-none py-2 rounded-md hover:bg-yellow-300 transition-all"
+                  className="relative w-full text-zinc-800 font-bold bg-primary border-none py-2 rounded-md hover:bg-blue-400 transition-all"
                 >
                   <p>REGISTER</p>
                 </button>

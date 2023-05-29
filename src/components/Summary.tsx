@@ -4,9 +4,6 @@ import { RootState } from "../redux/store";
 function Summary() {
   const leaderdoard = useSelector((state: RootState) => state.room.leaderboard);
   const summary = useSelector((state: RootState) => state.room.summary);
-  console.log("summary");
-  console.log(summary);
-
   return (
     <>
       <div className="w-[100vw] h-[100vh] fixed z-50 bg-overlay flex justify-center items-center drop-shadow-2xl">

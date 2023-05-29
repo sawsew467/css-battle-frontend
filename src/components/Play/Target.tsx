@@ -1,6 +1,7 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import QuestionImg from "../../assets/images/output/questionMark.png";
+import { showSnackbar } from "../../redux/slices/app";
 
 function Target() {
   const questionIndex = useSelector(
@@ -23,9 +24,16 @@ function Target() {
         return "#22c55e";
     }
   };
-
+  const dispatch = useDispatch();
   const handleColorCopy = (color:string)=> {
     navigator.clipboard.writeText(color);
+    dispatch(
+      showSnackbar({
+        open: true,
+        message: `Color #${color} has been copied to your clipboard`,
+        type: "success",
+      })
+    );
   }
   return (
     <div className="h-full flex flex-col border-l-[1px] border-zinc-600">

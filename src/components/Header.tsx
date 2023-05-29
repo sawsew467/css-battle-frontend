@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Logo from "../assets/images/header/logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { logout } from "../redux/slices/currentUser";
 import { useNavigate } from "react-router";
+import Logo1 from "../assets/images/header/logo3.svg"
 
 interface IProps {
   setIsShowLoginModal?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,7 +37,7 @@ function Header({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
   return (
     <div className="w-[100vw] h-[64px] px-4 bg-black flex items-center justify-between">
       <a href="/">
-        <img src={Logo}></img>
+        <img className="h-[32px]" src={Logo1}></img>
       </a>
       {currentUser.username ? (
         <div
@@ -81,7 +81,7 @@ function Header({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
               <p className="text-primary font-semibold">Log in</p>
             </button>
             <button
-              className="relative z-30 bg-primary px-3 py-2 flex flex-row items-center gap-3 rounded-md cursor-pointer hover:bg-yellow-300 transition-all"
+              className="relative z-30 bg-primary px-3 py-2 flex flex-row items-center gap-3 rounded-md cursor-pointer hover:bg-blue-400 transition-all"
               onClick={handleRegisterClick}
             >
               <p className="text-zinc-800 font-semibold">Register</p>

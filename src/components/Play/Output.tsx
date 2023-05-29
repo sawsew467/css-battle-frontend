@@ -81,7 +81,6 @@ function Output({ code }: IProps) {
     setIsSubmitting(false);
   };
 
-  
   return (
     <div className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
       <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between gap-8 px-6 font-bold ">
@@ -90,16 +89,19 @@ function Output({ code }: IProps) {
       </div>
       <div className=" bg-zinc-900 flex flex-col items-end pb-6">
         <div className="w-[400px] h-[300px] bg-slate-200 m-6 relative cursor-col-resize group">
-          <Img
+          {/* <Img
             className="absolute z-30 top-0 left-0 invisible"
             src={currentQuestion?.imageUrl}
+          ></Img> */}
+          {/* {isShow && ( */}
+          <Img
+            style={{
+              zIndex: isShow ? 30 : 10,
+            }}
+            className="absolute top-0 left-0"
+            src={currentQuestion?.imageUrl}
           ></Img>
-          {isShow && (
-            <Img
-              className="absolute z-30 top-0 left-0"
-              src={currentQuestion?.imageUrl}
-            ></Img>
-          )}
+          {/* )} */}
           <div
             className="absolute z-20 w-[400px] h-[300px] bg-white top-0 left-0"
             id="output"
@@ -171,7 +173,7 @@ function Output({ code }: IProps) {
           ) : (
             <button
               onClick={handleSubmit}
-              className="w-1/2 py-2 text-slate-800 bg-primary font-medium hover:bg-yellow-300 transition-all"
+              className="w-1/2 py-2 text-slate-800 bg-primary font-medium hover:bg-blue-400 transition-all"
             >
               SUBMIT
             </button>

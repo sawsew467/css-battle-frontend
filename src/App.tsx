@@ -1,3 +1,4 @@
+import React from "react";
 import { Route, Routes } from "react-router";
 import Play from "./pages/Play";
 import Home from "./pages/Home";
@@ -17,6 +18,16 @@ import {
   updateLeaderboard,
   updateSummary,
 } from "./redux/slices/room";
+import { Snackbar } from "@mui/material";
+import { hideSnackbar, showSnackbar } from "./redux/slices/app";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const ably = new Ably.Realtime(
@@ -45,31 +56,22 @@ function App() {
     dispatch(updateQuestionList(questionList));
   });
   channel.subscribe("progressUpdated", (message) => {
-    const leaderboardUpdated = message.data.leaderboard;
-    console.log(message);
-    
+    const leaderboardUpdated = message.data.leaderboard;    
     dispatch(updateLeaderboard(leaderboardUpdated));
+    dispatch(
+      showSnackbar({
+        open: true,
+        message: message.data.message,
+        type: "info",
+      })
+    );
   });
   channel.subscribe("playerFinished", (message) => {
     const summary = message.data.summary;
-    console.log("!!!");
-    console.log(message.data);
-    console.log("summary");
-    console.log(summary);
-    
     dispatch(updateSummary(summary));
     const leaderboardUpdated = message.data.leaderboard;
-    console.log(message);
-    
     dispatch(updateLeaderboard(leaderboardUpdated));
   });
-  // channel.subscribe("gameFinished", (message) => {
-  //   const summary = message;
-  //   console.log("!!!");
-  //   console.log(summary);
-    
-  //   dispatch(updateSummary(summary));
-  // });
   const currentUser = useSelector(
     (state: RootState) => state.currentUser.currentUser
   );
@@ -81,8 +83,30 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const snackBar = useSelector((state: RootState) => state.app.snackBar);
+  const handleClose = (
+    _event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch(hideSnackbar());
+  };
   return (
     <>
+      {snackBar.open && (
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={snackBar.open}
+          onClose={handleClose}
+          autoHideDuration={2000}
+        >
+          <Alert onClose={handleClose} severity={snackBar.type}>
+            {snackBar.message}
+          </Alert>
+        </Snackbar>
+      )}
       <Routes>
         <Route
           path="/"

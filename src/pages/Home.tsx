@@ -6,22 +6,12 @@ import LoginModal from "../components/LoginModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import RegisterModal from "../components/RegisterModal";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { createNewRoom, joinInRoom } from "../apis/room";
 import { ably } from "../App";
 import { RoomIState, update } from "../redux/slices/room";
 import { createRoom, joinRoom } from "../redux/slices/currentUser";
-import { changeLoadingStatus } from "../redux/slices/app";
+import { changeLoadingStatus, showSnackbar } from "../redux/slices/app";
 import LoadingModal from "../components/LoadingModal";
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
 interface IProps {
   setRoomCodeApp: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -60,9 +50,16 @@ function Home({ setRoomCodeApp }: IProps) {
         dispatch(joinRoom(room.roomCode));
         ably.channels.get(roomCode);
         setRoomCodeApp(room.roomCode);
+        dispatch(changeLoadingStatus(true));
+        navigate(`/play/${roomCode}`);
+        dispatch(
+          showSnackbar({
+            open: true,
+            message: "Join room successfully",
+            type: "success",
+          })
+        );
       }
-      dispatch(changeLoadingStatus(true));
-      navigate(`/play/${roomCode}`);
     }
   };
   const craeteNewRoom = async () => {
@@ -82,49 +79,33 @@ function Home({ setRoomCodeApp }: IProps) {
       ably.channels.get(roomCode);
       dispatch(changeLoadingStatus(false));
       navigate(`/play/${roomCode}`);
+      dispatch(
+        showSnackbar({
+          open: true,
+          message: "Create room successfully",
+          type: "success",
+        })
+      );
     }
   };
-  const [errMessage, setErrMessage] = useState<string>("");
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
+  
   return (
     <>
       {isShowLoginModal && (
         <LoginModal
           setIsShowLoginModal={setIsShowLoginModal}
           setIsShowRegisterModal={setIsShowRegisterModal}
-          setErrMessage={setErrMessage}
-          setOpen={setOpen}
         ></LoginModal>
       )}
       {isShowRegisterModal && (
         <RegisterModal
           setIsShowRegisterModal={setIsShowRegisterModal}
           setIsShowLoginModal={setIsShowLoginModal}
-          setErrMessage={setErrMessage}
-          setOpen={setOpen}
         ></RegisterModal>
       )}
       {pageLoading && <LoadingModal></LoadingModal>}
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={open}
-        onClose={handleClose}
-        autoHideDuration={2000}
-      >
-        <Alert onClose={handleClose} severity="error">
-          {errMessage}
-        </Alert>
-      </Snackbar>
+      
+
       <div className="flex flex-col h-[100vh] justify-between">
         <Header
           setIsShowLoginModal={setIsShowLoginModal}
@@ -152,7 +133,7 @@ function Home({ setRoomCodeApp }: IProps) {
               ></input>
               <span className="text-zinc-500 text-sm my-2">OR</span>
               <button
-                className="text-lg text-slate-800 py-2 bg-primary w-full rounded-md border-2 border-zinc-600 hover:bg-yellow-300 transition-all"
+                className="text-lg text-slate-800 py-2 bg-primary w-full rounded-md border-2 border-zinc-600 hover:bg-blue-400 transition-all"
                 onClick={craeteNewRoom}
               >
                 CREATE ROOM

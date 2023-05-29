@@ -10,7 +10,7 @@ export default {
         'slider': "var(--sliderWidth)",
       },
       colors: {
-        "primary": "#ffdf00",
+        "primary": "#0098FF",
         "overlay": "#0f0f0fda"
       }
     },
