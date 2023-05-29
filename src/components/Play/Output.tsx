@@ -10,7 +10,7 @@ import {
   resetTimer,
 } from "../../redux/slices/room";
 import { submitQuestion } from "../../apis/room";
-import html2canvas from "html2canvas";
+// import html2canvas from "html2canvas";
 
 interface IProps {
   code: string;
@@ -85,26 +85,26 @@ function Output({ code }: IProps) {
 
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const captureScreenshot = () => {
-    if (canvasRef.current) {
-      html2canvas(canvasRef.current).then((canvas) => {
-        // Tạo một URL dựa trên dữ liệu hình ảnh trong canvas
-        const imageUrl = canvas.toDataURL("image/png");
+  // const captureScreenshot = () => {
+  //   if (canvasRef.current) {
+  //     html2canvas(canvasRef.current).then((canvas) => {
+  //       // Tạo một URL dựa trên dữ liệu hình ảnh trong canvas
+  //       const imageUrl = canvas.toDataURL("image/png");
 
-        // Tạo một đối tượng HTML <a> ẩn
-        const link = document.createElement("a");
-        link.href = imageUrl;
-        link.download = "screenshot.png"; // Đặt tên tệp tải xuống
+  //       // Tạo một đối tượng HTML <a> ẩn
+  //       const link = document.createElement("a");
+  //       link.href = imageUrl;
+  //       link.download = "screenshot.png"; // Đặt tên tệp tải xuống
 
-        // Thêm đối tượng <a> vào DOM và kích hoạt sự kiện nhấp chuột tự động
-        document.body.appendChild(link);
-        link.click();
+  //       // Thêm đối tượng <a> vào DOM và kích hoạt sự kiện nhấp chuột tự động
+  //       document.body.appendChild(link);
+  //       link.click();
 
-        // Xóa đối tượng <a> khỏi DOM
-        document.body.removeChild(link);
-      });
-    }
-  };
+  //       // Xóa đối tượng <a> khỏi DOM
+  //       document.body.removeChild(link);
+  //     });
+  //   }
+  // };
   return (
     <div
       className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600"
