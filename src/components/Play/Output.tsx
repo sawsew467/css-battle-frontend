@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Compare from "../../assets/images/output/compare.svg";
 import { Img } from "react-image";
 import Leaderboard from "../Leaderboard";
@@ -10,6 +10,7 @@ import {
   resetTimer,
 } from "../../redux/slices/room";
 import { submitQuestion } from "../../apis/room";
+import html2canvas from "html2canvas";
 
 interface IProps {
   code: string;
@@ -79,21 +80,42 @@ function Output({ code }: IProps) {
     dispatch(increaseQuestionIndex());
     dispatch(resetTimer());
     setIsSubmitting(false);
+    // captureScreenshot();
   };
 
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  const captureScreenshot = () => {
+    if (canvasRef.current) {
+      html2canvas(canvasRef.current).then((canvas) => {
+        // Tạo một URL dựa trên dữ liệu hình ảnh trong canvas
+        const imageUrl = canvas.toDataURL("image/png");
+
+        // Tạo một đối tượng HTML <a> ẩn
+        const link = document.createElement("a");
+        link.href = imageUrl;
+        link.download = "screenshot.png"; // Đặt tên tệp tải xuống
+
+        // Thêm đối tượng <a> vào DOM và kích hoạt sự kiện nhấp chuột tự động
+        document.body.appendChild(link);
+        link.click();
+
+        // Xóa đối tượng <a> khỏi DOM
+        document.body.removeChild(link);
+      });
+    }
+  };
   return (
-    <div className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
+    <div
+      className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600"
+      ref={canvasRef}
+    >
       <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between gap-8 px-6 font-bold ">
         <p className="tracking-[.25em]">OUTPUT</p>
         <p className="text-red-500">{timer}s</p>
       </div>
       <div className=" bg-zinc-900 flex flex-col items-end pb-6">
         <div className="w-[400px] h-[300px] bg-slate-200 m-6 relative cursor-col-resize group">
-          {/* <Img
-            className="absolute z-30 top-0 left-0 invisible"
-            src={currentQuestion?.imageUrl}
-          ></Img> */}
-          {/* {isShow && ( */}
           <Img
             style={{
               zIndex: isShow ? 30 : 10,
@@ -101,7 +123,6 @@ function Output({ code }: IProps) {
             className="absolute top-0 left-0"
             src={currentQuestion?.imageUrl}
           ></Img>
-          {/* )} */}
           <div
             className="absolute z-20 w-[400px] h-[300px] bg-white top-0 left-0"
             id="output"

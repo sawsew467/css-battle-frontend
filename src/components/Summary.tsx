@@ -1,9 +1,15 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { useNavigate } from "react-router";
 
 function Summary() {
   const leaderdoard = useSelector((state: RootState) => state.room.leaderboard);
   const summary = useSelector((state: RootState) => state.room.summary);
+
+  const navigate = useNavigate();
+  const handleGoHome = () => {
+    navigate("/home");
+  }
   return (
     <>
       <div className="w-[100vw] h-[100vh] fixed z-50 bg-overlay flex justify-center items-center drop-shadow-2xl">
@@ -30,7 +36,10 @@ function Summary() {
                         <th className="w-1/3 py-1 px-2 text-start">Time</th>
                       </tr>
                       {roundResult.map((user) => (
-                        <tr key={user.username} className="flex flex-row border-2 border-t-0">
+                        <tr
+                          key={user.username}
+                          className="flex flex-row border-2 border-t-0"
+                        >
                           <td className="w-1/3 py-1 px-2">{user?.username}</td>
                           <td className="w-1/3 py-1 px-2 border-x-2">
                             {user?.time > 0 ? user?.point : "- - -"}
@@ -59,7 +68,10 @@ function Summary() {
                     <th className="w-1/3 py-1 px-2 text-start">Time</th>
                   </tr>
                   {summary?.map((user) => (
-                    <tr key={user.username} className="flex flex-row border-2 border-t-0">
+                    <tr
+                      key={user.username}
+                      className="flex flex-row border-2 border-t-0"
+                    >
                       <td className="w-1/3 py-1 px-2">{user?.username}</td>
                       <td className="w-1/3 py-1 px-2 border-x-2">
                         {user?.time > 0 ? user?.point : "- - -"}
@@ -72,6 +84,11 @@ function Summary() {
                 </table>
               </li>
             </ul>
+          </div>
+          <div className="w-full px-4 py-4 flex flex-col max-h-[600px] overflow-y-auto">
+            <button onClick={handleGoHome} className="w-full py-2 text-slate-800 bg-primary font-medium hover:bg-blue-400 transition-all">
+              BACK TO HOME PAGE
+            </button>
           </div>
         </div>
       </div>
