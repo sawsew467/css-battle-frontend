@@ -158,7 +158,7 @@ function Output() {
           matchPercentage={matchPercentage}
         ></SubmitComfirmModal>
       )}
-      <div className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
+      <div id="style-2" className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
         <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between gap-8 px-6 font-bold ">
           <p className="tracking-[.25em]">OUTPUT</p>
           <p className="text-red-500">{timer}s</p>

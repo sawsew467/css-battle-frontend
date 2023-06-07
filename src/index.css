@@ -5,6 +5,22 @@
   height: 100% !important;
 }
 @layer base {
+  #style-2::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
+  }
+
+  #style-2::-webkit-scrollbar {
+    width: 12px;
+    background-color: #f5f5f5;
+  }
+
+  #style-2::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #d62929;
+  }
   * {
     font-family: "Roboto", sans-serif;
   }
@@ -28,7 +44,7 @@
   .square-loader {
     width: 40px;
     height: 40px;
-    color: #0098FF;
+    color: #0098ff;
     background: linear-gradient(currentColor 0 0),
       linear-gradient(currentColor 0 0), linear-gradient(currentColor 0 0),
       linear-gradient(currentColor 0 0);
