@@ -1,23 +1,47 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useNavigate } from "react-router";
+import { getResultBoard } from "../apis/room";
+import { updateLeaderboard } from "../redux/slices/room";
+import { showSnackbar } from "../redux/slices/app";
 
 function Summary() {
-  const leaderdoard = useSelector((state: RootState) => state.room.leaderboard);
   const summary = useSelector((state: RootState) => state.room.summary);
+  const roomCode = useSelector((state: RootState) => state.room.room.roomCode);
+  const leaderdoard = useSelector((state: RootState) => state.room.leaderboard);
+
+  const dispatch = useDispatch();
+  const reloadData = async () => {
+    const access_token = localStorage.getItem("access_token");
+    if (access_token) {
+      const res = await getResultBoard(roomCode, access_token);
+      dispatch(updateLeaderboard(res.data.data.leaderboard));
+      dispatch(
+        showSnackbar({
+          open: true,
+          message: "Leaderboard updated",
+          type: "success",
+        })
+      );
+    }
+  };
 
   const navigate = useNavigate();
   const handleGoHome = () => {
     navigate("/");
-  }
+  };
+  
   return (
     <>
       <div className="w-[100vw] h-[100vh] fixed z-50 bg-overlay flex justify-center items-center drop-shadow-2xl">
         <div className="relative flex flex-col min-w-[480px] bg-zinc-900 rounded-lg">
           <div className="relative bg-zinc-800 px-4 py-2 flex justify-between items-center rounded-tl-lg rounded-tr-lg">
             <p className="text-xl text-slate-300 font-bold text-center w-full">
-              FINNISH GAME
+              Leader board
             </p>
+            <button onClick={reloadData}>
+              <i className="fa-solid fa-rotate-right text-slate-300"></i>
+            </button>
           </div>
           <div className="w-full px-4 py-4 flex flex-col max-h-[600px] overflow-y-auto">
             <ul className="flex flex-col gap-2">
@@ -86,7 +110,10 @@ function Summary() {
             </ul>
           </div>
           <div className="w-full px-4 py-4 flex flex-col max-h-[600px] overflow-y-auto">
-            <button onClick={handleGoHome} className="w-full py-2 text-slate-800 bg-primary font-medium hover:bg-blue-400 transition-all">
+            <button
+              onClick={handleGoHome}
+              className="w-full py-2 text-slate-800 bg-primary font-medium hover:bg-blue-400 transition-all"
+            >
               BACK TO HOME PAGE
             </button>
           </div>

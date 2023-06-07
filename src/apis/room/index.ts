@@ -8,6 +8,7 @@ export const END_POINT = {
   SUBMIT: "/submit",
   FINISH: "/finish",
   CHECK: "/check",
+  RESULT: "/result-board"
 };
 
 export const createNewRoom = (access_token: string | null) => {
@@ -89,6 +90,16 @@ export const compareResult = (payload: any, access_token: string | null) => {
     {
       ...payload,
     },
+    {
+      headers: { Authorization: `Bearer ${access_token}` },
+    }
+  );
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getResultBoard = (roomCode: any, access_token: string | null) => {
+  return axiosClient.get(
+    `/room/${roomCode}` + END_POINT.RESULT,
     {
       headers: { Authorization: `Bearer ${access_token}` },
     }

@@ -24,6 +24,7 @@ function Play() {
   useEffect(() => {
     questionList.length > 0 && setIsShowCoundown(true);
   }, [questionList]);
+  
   return (
     <>
       {questionIndex === questionList.length && <Summary></Summary>}

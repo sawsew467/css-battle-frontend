@@ -18,6 +18,8 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@uiw/codemirror-theme-github": "^4.19.16",
     "@uiw/codemirror-theme-okaidia": "^4.19.16",
+    "@uiw/codemirror-theme-solarized": "^4.21.2",
+    "@uiw/codemirror-theme-vscode": "^4.21.2",
     "@uiw/react-codemirror": "^4.19.16",
     "ably": "^1.2.39",
     "axios": "^1.4.0",

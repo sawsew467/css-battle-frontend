@@ -24,7 +24,7 @@ function Editor() {
         <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center pl-4 font-bold tracking-[.25em]">
           EDITOR
         </div>
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto ">
           <ReactCodeMirror
             theme={githubDark}
             extensions={[html()]}

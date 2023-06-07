@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 const axiosServices = axios.create({
-    baseURL: "https://a2a0-2402-800-6205-43aa-884f-608a-858-6f03.ngrok-free.app/api",
+    baseURL: "http://localhost:4000/api",
     timeout: 50000,
 });
 
@@ -37,7 +37,7 @@ axiosServices.interceptors.request.use(
 );
 
 const axiosUpload = axios.create({
-    baseURL: "https://a2a0-2402-800-6205-43aa-884f-608a-858-6f03.ngrok-free.app/api",
+    baseURL: "http://localhost:4000/api",
     timeout: 50000,
 });
 
