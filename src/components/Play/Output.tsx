@@ -4,9 +4,7 @@ import { Img } from "react-image";
 import Leaderboard from "../Leaderboard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import {
-  decreaseTimer,
-} from "../../redux/slices/room";
+import { decreaseTimer } from "../../redux/slices/room";
 import { compareResult } from "../../apis/room";
 import { showSnackbar } from "../../redux/slices/app";
 import SubmitComfirmModal from "../SubmitComfirmModal";
@@ -132,16 +130,34 @@ function Output() {
       const res = await compareResult(body, access_token);
       setMatchPercentage(res.data.data.point);
       setIsSubmitting(false);
-      setIsShowConfirmModal(true)
+      setIsShowConfirmModal(true);
     } catch (error) {
       console.log(error);
       setIsSubmitting(false);
     }
-  }
+  };
 
+  useEffect(() => {
+    const iframe = document.getElementById('myIframe') as HTMLIFrameElement | null;
+
+    if (iframe) {
+      iframe.onload = () => {
+        if (iframe.contentDocument) {
+          const iframeBody = iframe.contentDocument.body;
+          iframeBody.style.height = '300px';
+        }
+      };
+    }
+    
+  }, []);
   return (
     <>
-      {isShowConfirmModal && <SubmitComfirmModal setIsShowConfirmModal={setIsShowConfirmModal} matchPercentage={matchPercentage}></SubmitComfirmModal>}
+      {isShowConfirmModal && (
+        <SubmitComfirmModal
+          setIsShowConfirmModal={setIsShowConfirmModal}
+          matchPercentage={matchPercentage}
+        ></SubmitComfirmModal>
+      )}
       <div className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
         <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between gap-8 px-6 font-bold ">
           <p className="tracking-[.25em]">OUTPUT</p>
@@ -161,11 +177,19 @@ function Output() {
               id="output"
             >
               <iframe
+                id="output"
                 srcDoc={htmlCode}
                 title="output"
                 sandbox="allow-scripts"
-                width="100%"
-                height="100%"
+                width="400px"
+                height="300px"
+                style={{
+                  background: "white",
+                  width: "400px",
+                  height: "300px",
+                  border: "0px",
+                  outline: "0px",
+                }}
               />
             </div>
             <button
