@@ -67,7 +67,7 @@ function RegisterModal({
           dispatch(
             showSnackbar({
               open: true,
-              message: "Username or password is incorrect!!!",
+              message: error.response?.data.message,
               type: "error",
             })
           );
