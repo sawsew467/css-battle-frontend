@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { useNavigate } from "react-router";
@@ -12,6 +12,7 @@ import { RoomIState, resetRoom, update } from "../redux/slices/room";
 import { createRoom, joinRoom } from "../redux/slices/currentUser";
 import { changeLoadingStatus, showSnackbar } from "../redux/slices/app";
 import LoadingModal from "../components/LoadingModal";
+import axios from "axios";
 
 function Home() {
   const currentUser = useSelector(
@@ -28,16 +29,15 @@ function Home() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const handleEnterRoomCode = async (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (!currentUser.username) {
-      setIsShowLoginModal(true);
-      return;
+  useEffect(() => {
+    if (roomCode.length === 6) {
+      handleJoinRoom();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomCode]);
 
-    if (e.code === "Enter") {
+  const handleJoinRoom = async () => {
+    try {
       dispatch(changeLoadingStatus(true));
       const access_token = localStorage.getItem("access_token");
       if (access_token) {
@@ -56,6 +56,30 @@ function Home() {
           })
         );
       }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        dispatch(
+          showSnackbar({
+            open: true,
+            message: error?.response?.data.message,
+            type: "error",
+          })
+        );
+      }
+      dispatch(changeLoadingStatus(false));
+      setRoomCode("");
+    }
+  };
+  const handleEnterRoomCode = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (!currentUser.username) {
+      setIsShowLoginModal(true);
+      return;
+    }
+
+    if (e.code === "Enter" || roomCode.length === 6) {
+      handleJoinRoom();
     }
   };
   const craeteNewRoom = async () => {
@@ -63,29 +87,41 @@ function Home() {
       setIsShowLoginModal(true);
       return;
     }
-    dispatch(resetRoom());
-    dispatch(changeLoadingStatus(true));
-    const access_token = localStorage.getItem("access_token");
-    if (access_token) {
-      const response = await createNewRoom(access_token);
-      const room: RoomIState["room"] = response.data.data.data.room;      
-      dispatch(update(room));
-      dispatch(createRoom(room.roomCode));
-      const roomCode = response.data.data.data.room.roomCode;
-      ably.channels.get(roomCode);
+    try {
+      dispatch(resetRoom());
+      dispatch(changeLoadingStatus(true));
+      const access_token = localStorage.getItem("access_token");
+      if (access_token) {
+        const response = await createNewRoom(access_token);
+        const room: RoomIState["room"] = response.data.data.data.room;
+        dispatch(update(room));
+        dispatch(createRoom(room.roomCode));
+        const roomCode = response.data.data.data.room.roomCode;
+        ably.channels.get(roomCode);
+        dispatch(changeLoadingStatus(false));
+        navigate(`/play/${roomCode}`);
+        dispatch(
+          showSnackbar({
+            open: true,
+            message: "Create room successfully",
+            type: "success",
+          })
+        );
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        dispatch(
+          showSnackbar({
+            open: true,
+            message: error?.response?.data.message,
+            type: "error",
+          })
+        );
+      }
       dispatch(changeLoadingStatus(false));
-      navigate(`/play/${roomCode}`);
-      dispatch(
-        showSnackbar({
-          open: true,
-          message: "Create room successfully",
-          type: "success",
-        })
-      );
-      
     }
   };
-  
+
   return (
     <>
       {isShowLoginModal && (
@@ -101,7 +137,6 @@ function Home() {
         ></RegisterModal>
       )}
       {pageLoading && <LoadingModal></LoadingModal>}
-      
 
       <div className="flex flex-col h-[100vh] justify-between">
         <Header
@@ -127,6 +162,7 @@ function Home() {
                 placeholder="ROOM CODE"
                 onChange={(e) => setRoomCode(e.target.value)}
                 onKeyDown={(e) => handleEnterRoomCode(e)}
+                value={roomCode}
               ></input>
               <span className="text-zinc-500 text-sm my-2">OR</span>
               <button

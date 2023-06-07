@@ -60,7 +60,6 @@ function LoginModal({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
         }
       }
       if (axios.isAxiosError(error)) {
-        console.log(error);
         if (
           error.response?.status === 401 ||
           error.response?.status === 404 ||
