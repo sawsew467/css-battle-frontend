@@ -1,10 +1,8 @@
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { html } from "@codemirror/lang-html";
 import { githubDark } from "@uiw/codemirror-theme-github";
-
-interface IProps {
-  setCode: React.Dispatch<React.SetStateAction<string>>;
-}
+import { useDispatch } from "react-redux";
+import { setHtmlCode } from "../../redux/slices/room";
 
 const defaultValue = `<body>
   <div></div>
@@ -18,10 +16,11 @@ const defaultValue = `<body>
   }
 </style>`;
 
-function Editor({ setCode }: IProps) {
+function Editor() {
+  const dispatch = useDispatch();
   return (
     <>
-      <div className="flex-1 h-[calc(100vh-104px)] flex flex-col ">
+      <div className="flex-1 h-[calc(100vh-104px)] max-w-[calc(100vw-896px)] flex flex-col ">
         <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center pl-4 font-bold tracking-[.25em]">
           EDITOR
         </div>
@@ -31,7 +30,7 @@ function Editor({ setCode }: IProps) {
             extensions={[html()]}
             width="100%"
             height="100%"
-            onChange={(val) => setCode(val)}
+            onChange={(val) => dispatch(setHtmlCode(val))}
             value={defaultValue}
           />
         </div>

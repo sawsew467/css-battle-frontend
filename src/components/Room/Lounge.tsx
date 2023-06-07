@@ -33,15 +33,15 @@ function Lounge() {
   });
   const [isReady, setIsReady] = useState<boolean>(false);
   const [isShowSettings, setIsShowSettings] = useState<boolean>(false);
-  const [players, setPlayers] = useState<RoomIState["paticipants"]>([]);
+  const [players, setPlayers] = useState<RoomIState["players"]>([]);
   const [emptyLounge, setEmptyLounge] = useState<number[]>();
 
   useEffect(() => {
-    setPlayers(room.participants);
+    setPlayers(room.players);
   }, [room]);
   useEffect(() => {
     const arr: number[] = [];
-    for (let i = 1; i <= 5 - players.length; i++) {
+    for (let i = 1; i <= 5 - players?.length; i++) {
       arr.push(i);
     }
     setEmptyLounge(arr);
@@ -75,17 +75,21 @@ function Lounge() {
   };
 
   const handleStartGame = async () => {
-    const access_token = localStorage.getItem("access_token");
-    const body = {
-      roomCode: room.roomCode,
-      options: options,
-    };
-    await handleReady();
-    await startGame(body, access_token);
+    try {
+      const access_token = localStorage.getItem("access_token");
+      const body = {
+        roomCode: room.roomCode,
+        options: options,
+      };
+      await handleReady();
+      await startGame(body, access_token);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const isReadyAllParticipants = () => {
-    for (let i = 1; i < players.length; i++) {
+    for (let i = 1; i < players?.length; i++) {
       if (players[i]?.status === "WAITING") {
         return false;
       }
@@ -110,7 +114,7 @@ function Lounge() {
           </div>
           <div className="w-full px-4 py-8 flex flex-col">
             <ul className="w-full flex flex-row">
-              {players.map((player) => {
+              {players?.map((player) => {
                 if (player) {
                   return (
                     <li
@@ -173,9 +177,7 @@ function Lounge() {
               ))}
             {participant.role === "HOST" &&
               (isReadyAllParticipants() === false ? (
-                <button
-                  className="text-md text-slate-800 py-2 bg-zinc-500 w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 transition-all"
-                >
+                <button className="text-md text-slate-800 py-2 bg-zinc-500 w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 transition-all">
                   Waiting for all ready
                 </button>
               ) : !isReady ? (

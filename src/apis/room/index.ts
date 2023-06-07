@@ -7,6 +7,7 @@ export const END_POINT = {
   START: "/start",
   SUBMIT: "/submit",
   FINISH: "/finish",
+  CHECK: "/check",
 };
 
 export const createNewRoom = (access_token: string | null) => {
@@ -51,11 +52,16 @@ export const startGame = (payload: any, access_token: string | null) => {
   );
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const submitQuestion = (payload: any, access_token: string | null) => {
+export const submitQuestion = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload: any,
+  roomCode: string,
+  access_token: string | null
+) => {
   return axiosClient.post(
-    `/room/${payload.roomCode}` + END_POINT.SUBMIT,
+    `/room/${roomCode}` + END_POINT.SUBMIT,
     {
-      ...payload.result,
+      ...payload,
     },
     {
       headers: { Authorization: `Bearer ${access_token}` },
@@ -69,6 +75,19 @@ export const finnishGame = (roomCode: any, access_token: string | null) => {
     `/room/${roomCode}` + END_POINT.FINISH,
     {
       roomCode: roomCode,
+    },
+    {
+      headers: { Authorization: `Bearer ${access_token}` },
+    }
+  );
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const compareResult = (payload: any, access_token: string | null) => {
+  return axiosClient.post(
+    `/room` + END_POINT.CHECK,
+    {
+      ...payload,
     },
     {
       headers: { Authorization: `Bearer ${access_token}` },

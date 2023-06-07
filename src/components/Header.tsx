@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { logout } from "../redux/slices/currentUser";
-import { useNavigate } from "react-router";
 import Logo1 from "../assets/images/header/logo3.svg"
 
 interface IProps {
@@ -30,10 +29,6 @@ function Header({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
     dispatch(logout());
     window.location.reload();
   };
-  const navigate = useNavigate();
-  const handleManagementClick = () => {
-    navigate("/admin");
-  };
   return (
     <div className="w-[100vw] h-[64px] px-4 bg-black flex items-center justify-between">
       <a href="/">
@@ -54,16 +49,16 @@ function Header({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
           <i className="fa-sharp fa-solid fa-caret-down text-slate-400"></i>
           {isShow && (
             <div className="flex flex-col items-end absolute z-20 right-0 top-[48px] rounded-md">
-              <div
+              {/* <div
                 onClick={handleManagementClick}
                 className=" h-[44px] w-full bg-slate-700 px-3 py-2 flex flex-row items-center gap-3 rounded-tl-md rounded-tr-md cursor-pointer hover:bg-slate-600 transition-all"
               >
                 <p className="text-white font-semibold">Management</p>
                 <i className="fa-solid fa-screwdriver-wrench text-slate-400"></i>
-              </div>
+              </div> */}
               <div
                 onClick={handleLogoutClick}
-                className=" h-[44px] w-full bg-slate-700 px-3 py-2 flex flex-row justify-end items-center gap-3 rounded-bl-md rounded-br-md cursor-pointer hover:bg-slate-600 transition-all"
+                className=" h-[44px] w-full bg-slate-700 px-3 py-2 flex flex-row justify-end items-center gap-3 rounded-md cursor-pointer hover:bg-slate-600 transition-all"
               >
                 <p className="text-white font-semibold">Log out</p>
                 <i className="fa-solid fa-right-from-bracket text-slate-400"></i>

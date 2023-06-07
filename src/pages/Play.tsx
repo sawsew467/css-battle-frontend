@@ -19,7 +19,6 @@ function Play() {
     (state: RootState) => state.room.questionIndex
   );
 
-  const [code, setCode] = useState<string>("");
   const [isShowCoundown, setIsShowCoundown] = useState<boolean>(false);
 
   useEffect(() => {
@@ -35,8 +34,8 @@ function Play() {
       <div className="flex flex-col h-[100vh] justify-between">
         <Header></Header>
         <div className="flex-1 flex flex-row">
-          <Editor setCode={setCode}></Editor>
-          <Output code={code}></Output>
+          <Editor></Editor>
+          <Output></Output>
           <Target></Target>
         </div>
         <Footer></Footer>

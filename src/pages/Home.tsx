@@ -8,15 +8,12 @@ import { RootState } from "../redux/store";
 import RegisterModal from "../components/RegisterModal";
 import { createNewRoom, joinInRoom } from "../apis/room";
 import { ably } from "../App";
-import { RoomIState, update } from "../redux/slices/room";
+import { RoomIState, resetRoom, update } from "../redux/slices/room";
 import { createRoom, joinRoom } from "../redux/slices/currentUser";
 import { changeLoadingStatus, showSnackbar } from "../redux/slices/app";
 import LoadingModal from "../components/LoadingModal";
-interface IProps {
-  setRoomCodeApp: React.Dispatch<React.SetStateAction<string>>;
-}
 
-function Home({ setRoomCodeApp }: IProps) {
+function Home() {
   const currentUser = useSelector(
     (state: RootState) => state.currentUser.currentUser
   );
@@ -49,7 +46,6 @@ function Home({ setRoomCodeApp }: IProps) {
         dispatch(update(room));
         dispatch(joinRoom(room.roomCode));
         ably.channels.get(roomCode);
-        setRoomCodeApp(room.roomCode);
         dispatch(changeLoadingStatus(true));
         navigate(`/play/${roomCode}`);
         dispatch(
@@ -67,15 +63,15 @@ function Home({ setRoomCodeApp }: IProps) {
       setIsShowLoginModal(true);
       return;
     }
+    dispatch(resetRoom());
     dispatch(changeLoadingStatus(true));
     const access_token = localStorage.getItem("access_token");
     if (access_token) {
       const response = await createNewRoom(access_token);
-      const room: RoomIState["room"] = response.data.data.data.room;
+      const room: RoomIState["room"] = response.data.data.data.room;      
       dispatch(update(room));
       dispatch(createRoom(room.roomCode));
       const roomCode = response.data.data.data.room.roomCode;
-      setRoomCodeApp(roomCode);
       ably.channels.get(roomCode);
       dispatch(changeLoadingStatus(false));
       navigate(`/play/${roomCode}`);
@@ -86,6 +82,7 @@ function Home({ setRoomCodeApp }: IProps) {
           type: "success",
         })
       );
+      
     }
   };
   

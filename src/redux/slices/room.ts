@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface RoomIState {
-  paticipant: {
+  player: {
     avatarUrl: string;
     id: string;
     points: [];
@@ -10,12 +10,13 @@ export interface RoomIState {
     total: number;
     username: string;
   } | null;
-  paticipants: RoomIState["paticipant"][];
+  players: RoomIState["player"][];
   room: {
     createdAt: string;
     deletedAt: string;
     id: string;
-    participants: RoomIState["paticipants"];
+    playerHostId: string;
+    players: RoomIState["players"];
     roomCode: string;
     status: "OPEN" | "CLOSED" | "PROGRESS";
     updatedAt: string;
@@ -48,6 +49,7 @@ export interface RoomIState {
     isPlaying: boolean;
     leaderboard: RoomIState["roundResult"][];
     summary: RoomIState["summary"];
+    htmlCode: string;
   };
 }
 
@@ -56,7 +58,8 @@ const initialState: RoomIState["init"] = {
     createdAt: "",
     deletedAt: "",
     id: "",
-    participants: [],
+    playerHostId: "",
+    players: [],
     roomCode: "",
     status: "CLOSED",
     updatedAt: "",
@@ -67,13 +70,33 @@ const initialState: RoomIState["init"] = {
   timer: 600,
   isPlaying: false,
   leaderboard: [],
-  summary: []
+  summary: [],
+  htmlCode: `<body>
+  <div></div>
+</body>
+<style>
+  body {
+    background-color: #62374e;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+</style>`,
 };
 
 export const roomSlice = createSlice({
   name: "room",
   initialState,
   reducers: {
+    resetRoom: (state) => {
+      state.room.players = [];
+      state.questionIndex = -1;
+      state.questionList = [];
+      state.status = "OPEN";
+      state.leaderboard = [];
+      state.isPlaying = false;
+      state.timer = 600;
+    },
     update: (state, action) => {
       state.room = action.payload;
     },
@@ -101,7 +124,9 @@ export const roomSlice = createSlice({
     updateSummary: (state, action) => {
       state.summary = action.payload;
     },
-
+    setHtmlCode: (state, action) => {
+      state.htmlCode = action.payload;
+    },
   },
 });
 
@@ -115,7 +140,9 @@ export const {
   increaseQuestionIndex,
   changeIsPlaying,
   updateLeaderboard,
-  updateSummary
+  updateSummary,
+  setHtmlCode,
+  resetRoom,
 } = roomSlice.actions;
 
 export default roomSlice.reducer;
