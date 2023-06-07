@@ -98,7 +98,7 @@ export const compareResult = (payload: any, access_token: string | null) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getResultBoard = (roomCode: any, access_token: string | null) => {
-  return axiosClient.get(
+  return axiosClient.post(
     `/room/${roomCode}` + END_POINT.RESULT,
     {
       headers: { Authorization: `Bearer ${access_token}` },
