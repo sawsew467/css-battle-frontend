@@ -35,6 +35,7 @@ function Lounge() {
   const [isShowSettings, setIsShowSettings] = useState<boolean>(false);
   const [players, setPlayers] = useState<RoomIState["players"]>([]);
   const [emptyLounge, setEmptyLounge] = useState<number[]>();
+  const [isLoadingReady, setIsLoadingReady] = useState<boolean>(false);
 
   useEffect(() => {
     setPlayers(room.players);
@@ -48,30 +49,45 @@ function Lounge() {
   }, [players]);
 
   const handleReady = async () => {
-    const access_token = localStorage.getItem("access_token");
-    if (access_token) {
-      const body = {
-        roomCode: participant.roomCode,
-        status: "READY",
-      };
-      const res = await changeParticipantStatus(body, access_token);
-      const roomUpdated = res.data.data.data.room;
-      dispatch(update(roomUpdated));
+    setIsLoadingReady(true);
+    try {
+      const access_token = localStorage.getItem("access_token");
+      if (access_token) {
+        const body = {
+          roomCode: participant.roomCode,
+          status: "READY",
+        };
+        const res = await changeParticipantStatus(body, access_token);
+        const roomUpdated = res.data.data.data.room;
+        dispatch(update(roomUpdated));
+      }
+      setIsReady(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoadingReady(false);
     }
-    setIsReady(true);
   };
+
   const handleCancel = async () => {
-    const access_token = localStorage.getItem("access_token");
-    if (access_token) {
-      const body = {
-        roomCode: participant.roomCode,
-        status: "WAITING",
-      };
-      const res = await changeParticipantStatus(body, access_token);
-      const roomUpdated = res.data.data.data.room;
-      dispatch(update(roomUpdated));
+    setIsLoadingReady(true);
+    try {
+      const access_token = localStorage.getItem("access_token");
+      if (access_token) {
+        const body = {
+          roomCode: participant.roomCode,
+          status: "WAITING",
+        };
+        const res = await changeParticipantStatus(body, access_token);
+        const roomUpdated = res.data.data.data.room;
+        dispatch(update(roomUpdated));
+      }
+      setIsReady(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoadingReady(false);
     }
-    setIsReady(false);
   };
 
   const handleStartGame = async () => {
@@ -161,11 +177,21 @@ function Lounge() {
             </ul>
             {participant.role === "GUEST" &&
               (!isReady ? (
-                <button
-                  onClick={handleReady}
-                  className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-blue-400 transition-all"
-                >
-                  READY
+                isLoadingReady ? (
+                  <button className="mt-4 mx-auto relative w-4/5 h-11 text-zinc-800 font-bold bg-zinc-500 border-2 border-zinc-600 py-2 rounded-md transition-all">
+                    <span className="absolute top-2 right-[calc(50%-12px)] loader"></span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleReady}
+                    className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-blue-400 transition-all"
+                  >
+                    READY
+                  </button>
+                )
+              ) : isLoadingReady ? (
+                <button className="mt-4 mx-auto relative w-4/5 h-11 text-zinc-800 font-bold bg-zinc-500 border-2 border-zinc-600 py-2 rounded-md transition-all">
+                  <span className="absolute top-2 right-[calc(50%-12px)] loader"></span>
                 </button>
               ) : (
                 <button
@@ -175,17 +201,28 @@ function Lounge() {
                   CANCEL
                 </button>
               ))}
+
             {participant.role === "HOST" &&
               (isReadyAllParticipants() === false ? (
                 <button className="text-md text-slate-800 py-2 bg-zinc-500 w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 transition-all">
                   Waiting for all ready
                 </button>
               ) : !isReady ? (
-                <button
-                  onClick={handleStartGame}
-                  className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-blue-400 transition-all"
-                >
-                  START GAME
+                isLoadingReady ? (
+                  <button className="mt-4 mx-auto relative w-4/5 h-11 text-zinc-800 font-bold bg-zinc-500 border-2 border-zinc-600 py-2 rounded-md transition-all">
+                    <span className="absolute top-2 right-[calc(50%-12px)] loader"></span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleStartGame}
+                    className="text-md text-slate-800 py-2 bg-primary w-4/5 mx-auto mt-4 rounded-md border-2 border-zinc-600 hover:bg-blue-400 transition-all"
+                  >
+                    START GAME
+                  </button>
+                )
+              ) : isLoadingReady ? (
+                <button className="mt-4 mx-auto relative w-4/5 h-11 text-zinc-800 font-bold bg-zinc-500 border-2 border-zinc-600 py-2 rounded-md transition-all">
+                  <span className="absolute top-2 right-[calc(50%-12px)] loader"></span>
                 </button>
               ) : (
                 <button className="relative w-4/5 h-11 mt-4 mx-auto text-zinc-800 font-bold bg-zinc-500 border-none py-2 rounded-md transition-all">

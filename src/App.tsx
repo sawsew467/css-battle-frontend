@@ -45,7 +45,6 @@ function App() {
 
   if (roomCode !== "") {
     const channel = ably.channels.get(roomCode);
-
     channel.subscribe("roomUpdated", (message) => {
       const room: RoomIState["room"] = message.data.room;
       dispatch(update(room));
@@ -100,10 +99,10 @@ function App() {
     dispatch(hideSnackbar());
   };
 
-  window.addEventListener("beforeunload", (ev) => {
-    ev.preventDefault();
-    return (ev.returnValue = "Are you sure you want to close?");
-  });
+  // window.addEventListener("beforeunload", (ev) => {
+  //   ev.preventDefault();
+  //   return (ev.returnValue = "Are you sure you want to close?");
+  // });
   return (
     <>
       {snackBar.open && (

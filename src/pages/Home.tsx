@@ -47,6 +47,7 @@ function Home() {
         dispatch(joinRoom(room.roomCode));
         ably.channels.get(roomCode);
         dispatch(changeLoadingStatus(true));
+        dispatch(changeLoadingStatus(false));
         navigate(`/play/${roomCode}`);
         dispatch(
           showSnackbar({

@@ -13,8 +13,6 @@ function Leaderboard() {
     const access_token = localStorage.getItem("access_token");
     if (access_token) {
       const res = await getResultBoard(roomCode, access_token);
-      console.log(res);
-      console.log(leaderdoard);
       dispatch(updateLeaderboard(res.data.data.leaderboard));
       dispatch(
         showSnackbar({

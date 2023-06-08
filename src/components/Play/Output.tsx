@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import Compare from "../../assets/images/output/compare.svg";
+import { useEffect, useRef, useState } from "react";
 import { Img } from "react-image";
 import Leaderboard from "../Leaderboard";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +8,11 @@ import { compareResult } from "../../apis/room";
 import { showSnackbar } from "../../redux/slices/app";
 import SubmitComfirmModal from "../SubmitComfirmModal";
 
-function Output() {
+interface IProps {
+  codeEditor: string;
+}
+
+function Output({ codeEditor }: IProps) {
   const htmlCode = useSelector((state: RootState) => state.room.htmlCode);
 
   const questionIndex = useSelector(
@@ -33,11 +36,11 @@ function Output() {
 
   const currentQuestion = questionList[questionIndex];
 
-  const [isShow, setIsShow] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isShowConfirmModal, setIsShowConfirmModal] = useState<boolean>(false);
   const [matchPercentage, setMatchPercentage] = useState<number>(0);
+  const [isDiff, setIsDiff] = useState<boolean>(false);
 
   const validateHtmlCode = () => {
     if (htmlCode.includes("url") || htmlCode.includes("<img")) {
@@ -136,20 +139,63 @@ function Output() {
       setIsSubmitting(false);
     }
   };
+  const [shiftPressed, setShiftPressed] = useState(false);
 
   useEffect(() => {
-    const iframe = document.getElementById('myIframe') as HTMLIFrameElement | null;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.shiftKey) {
+        setShiftPressed(true);
+      }
+    };
 
-    if (iframe) {
-      iframe.onload = () => {
-        if (iframe.contentDocument) {
-          const iframeBody = iframe.contentDocument.body;
-          iframeBody.style.height = '300px';
-        }
-      };
-    }
-    
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (!event.shiftKey) {
+        setShiftPressed(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
   }, []);
+
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const [mousePosition, setMousePosition] = useState({
+    mouseX: 400,
+    mouseY: 300,
+  });
+  const [isMouseInside, setIsMouseInside] = useState(false);
+  const [isShowSlider, setIsShowSlider] = useState(true);
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    setIsMouseInside(true);
+    const { clientX, clientY } = event;
+    const { top, left } = divRef.current?.getBoundingClientRect() || {
+      top: 0,
+      left: 0,
+    };
+
+    const mouseX = clientX - left;
+    const mouseY = clientY - top;
+    setMousePosition({
+      mouseX,
+      mouseY,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setIsMouseInside(false);
+    setMousePosition({
+      mouseX: 400,
+      mouseY: 300,
+    });
+  };
+
   return (
     <>
       {isShowConfirmModal && (
@@ -158,29 +204,88 @@ function Output() {
           matchPercentage={matchPercentage}
         ></SubmitComfirmModal>
       )}
-      <div id="style-2" className="h-[calc(100vh-104px)] overflow-auto flex flex-col border-l-[1px] border-zinc-600">
-        <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between gap-8 px-6 font-bold ">
-          <p className="tracking-[.25em]">OUTPUT</p>
-          <p className="text-red-500">{timer}s</p>
+      <div
+        id="style-2"
+        className="h-[calc(100vh-104px)] w-[448px] overflow-auto flex flex-col border-l-[1px] border-zinc-600"
+      >
+        <div className="w-full bg-zinc-800 text-slate-300 py-1 flex items-center justify-between gap-8 px-6">
+          <p className="tracking-[.25em] font-bold text-lg">OUTPUT</p>
+          <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              <input
+                type="checkbox"
+                onChange={(e) => setIsShowSlider(e.target.checked)}
+                checked={isShowSlider}
+                className="outline-none"
+              ></input>
+              <p className="text-lg">Slide & Compare</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <input
+                type="checkbox"
+                onChange={(e) => setIsDiff(e.target.checked)}
+                className="outline-none"
+              ></input>
+              <p className="text-lg">Diff</p>
+            </div>
+          </div>
         </div>
-        <div className=" bg-zinc-900 flex flex-col items-end pb-6">
-          <div className="w-[400px] h-[300px] bg-slate-200 m-6 relative cursor-col-resize group">
-            <Img
-              style={{
-                zIndex: isShow ? 30 : 10,
-              }}
-              className="absolute top-0 left-0"
-              src={currentQuestion?.imageUrl}
-            ></Img>
+        <div className=" bg-zinc-900 flex flex-col pb-6 relative">
+          <div
+            className="w-[400px] h-[300px] absolute top-6 left-6 z-40 bg-transparent"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            ref={divRef}
+            style={{
+              cursor: shiftPressed ? "row-resize" : "col-resize",
+            }}
+          ></div>
+          {isShowSlider && (
             <div
-              className="absolute z-20 w-[400px] h-[300px] bg-white top-0 left-0"
+              className="absolute bg-red-500 z-30 top-6 left-6"
+              style={{
+                height: shiftPressed ? "1px" : "300px",
+                width: shiftPressed ? "400px" : "1px",
+                display: !isMouseInside ? "none" : "block",
+                transform: !shiftPressed
+                  ? `translate(${mousePosition.mouseX}px,0)`
+                  : `translate(0,${mousePosition.mouseY}px)`,
+              }}
+            ></div>
+          )}
+          <Img
+            className="absolute z-10 top-6 left-6 w-[400px] h-[300px]"
+            src={currentQuestion?.imageUrl}
+          ></Img>
+          <div
+            style={{
+              width:
+                isShowSlider && !shiftPressed && isMouseInside
+                  ? `${mousePosition.mouseX}px`
+                  : "400px",
+              height:
+                isShowSlider && shiftPressed && isMouseInside
+                  ? `${mousePosition.mouseY}px`
+                  : "300px",
+              marginBottom:
+                isShowSlider && shiftPressed
+                  ? `${324 - mousePosition.mouseY}px`
+                  : "24px",
+            }}
+            className="h-[300px] bg-slate-200 m-6 relative cursor-col-resize group overflow-hidden"
+          >
+            <div
+              className="absolute z-20 w-[400px] h-[300px] bg-white top-0 left-0 overflow-hidden"
               id="output"
+              style={{
+                mixBlendMode: isDiff ? "difference" : "initial",
+              }}
             >
               <iframe
-                id="output"
-                srcDoc={htmlCode}
-                title="output"
-                sandbox="allow-scripts"
+                id="myIframe"
+                srcDoc={codeEditor}
+                title="Preview"
+                sandbox="allow-same-origin"
                 width="400px"
                 height="300px"
                 style={{
@@ -192,18 +297,12 @@ function Output() {
                 }}
               />
             </div>
-            <button
-              className="absolute z-40 bottom-1 left-1 opacity-50 hover:opacity-100 bg-zinc-800 w-[50px] mr-6 flex justify-center py-1 px-2 hover:bg-zinc-700 transition-all"
-              onMouseDown={() => setIsShow(true)}
-              onMouseUp={() => setIsShow(false)}
-            >
-              <img className="h-[20px]" src={Compare}></img>
-            </button>
           </div>
-          <div className="flex w-full pl-6">
+          <div className="flex w-full px-6 justify-between">
             <p className="text-slate-300">
               Compatibility rate: <span>{matchPercentage}</span>%
             </p>
+            <p className="text-red-500">{timer}s</p>
           </div>
           <div className="px-6 mt-2 flex justify-between gap-2 w-full">
             {isLoading ? (

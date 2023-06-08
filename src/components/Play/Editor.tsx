@@ -4,6 +4,10 @@ import { githubDark } from "@uiw/codemirror-theme-github";
 import { useDispatch } from "react-redux";
 import { setHtmlCode } from "../../redux/slices/room";
 
+interface IProps {
+  setCodeEditor: React.Dispatch<React.SetStateAction<string>>;
+}
+
 const defaultValue = `<body>
   <div></div>
 </body>
@@ -16,8 +20,13 @@ const defaultValue = `<body>
   }
 </style>`;
 
-function Editor() {
+function Editor({ setCodeEditor }: IProps) {
   const dispatch = useDispatch();
+
+  const handleOnChange = (val: string) => {
+    dispatch(setHtmlCode(val));
+    setCodeEditor(val);
+  };
   return (
     <>
       <div className="flex-1 h-[calc(100vh-104px)] max-w-[calc(100vw-896px)] flex flex-col ">
@@ -30,7 +39,7 @@ function Editor() {
             extensions={[html()]}
             width="100%"
             height="100%"
-            onChange={(val) => dispatch(setHtmlCode(val))}
+            onChange={(val) => handleOnChange(val)}
             value={defaultValue}
           />
         </div>

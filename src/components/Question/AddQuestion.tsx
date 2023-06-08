@@ -14,7 +14,9 @@ function AddQuestion() {
   const [newColor, setNewColor] = useState<IState["color"]>("");
 
   const handleAddColor = () => {
-    setColors([...colors, newColor]);
+    const color = newColor;
+    color.replace("#", "");
+    setColors([...colors, color]);
     setNewColor("");
   };
   const handleDeleteColor = (pos: number) => {

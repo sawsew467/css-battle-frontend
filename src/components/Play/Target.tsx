@@ -26,7 +26,7 @@ function Target() {
   };
   const dispatch = useDispatch();
   const handleColorCopy = (color:string)=> {
-    navigator.clipboard.writeText(color);
+    navigator.clipboard.writeText(`#${color}`);
     dispatch(
       showSnackbar({
         open: true,
@@ -36,7 +36,7 @@ function Target() {
     );
   }
   return (
-    <div className="h-full flex flex-col border-l-[1px] border-zinc-600">
+    <div className="h-full w-[448px] flex flex-col border-l-[1px] border-zinc-600">
       <div className="w-full bg-zinc-800 text-slate-300 text-lg py-1 flex items-center justify-between px-6">
         <p className="font-bold tracking-[.25em]">
           QUESTION {questionIndex + 1}

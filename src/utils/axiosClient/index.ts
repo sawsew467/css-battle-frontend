@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 const axiosServices = axios.create({
-    baseURL: "https://c5be-14-254-133-68.ngrok-free.app/api",
+    baseURL: "https://36d3-14-254-133-68.ngrok-free.app/api",
     timeout: 50000,
 });
 
@@ -37,7 +37,7 @@ axiosServices.interceptors.request.use(
 );
 
 const axiosUpload = axios.create({
-    baseURL: "https://c5be-14-254-133-68.ngrok-free.app/api",
+    baseURL: "https://36d3-14-254-133-68.ngrok-free.app/api",
     timeout: 50000,
 });
 
