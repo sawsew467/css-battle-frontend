@@ -44,6 +44,13 @@ function Output({ codeEditor }: IProps) {
 
   const validateHtmlCode = () => {
     if (htmlCode.includes("url") || htmlCode.includes("<img")) {
+      dispatch(
+        showSnackbar({
+          open: true,
+          message: "Image is not allowed!!!",
+          type: "error",
+        })
+      );
       return false;
     }
     return true;
@@ -85,13 +92,6 @@ function Output({ codeEditor }: IProps) {
   }, [timer]);
   const handleSubmit = async () => {
     if (!validateHtmlCode()) {
-      dispatch(
-        showSnackbar({
-          open: true,
-          message: "Image is not allowed!!!",
-          type: "error",
-        })
-      );
       return;
     }
     try {

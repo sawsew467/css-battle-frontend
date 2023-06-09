@@ -36,7 +36,6 @@ function LoginModal({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
           refresh_token: token.refreshToken,
         })
       );
-      // setTimeout(() => {
         setIsLoading(false);
         setIsShowLoginModal(false);
         dispatch(
@@ -46,7 +45,6 @@ function LoginModal({ setIsShowLoginModal, setIsShowRegisterModal }: IProps) {
             type: "success",
           })
         );
-      // }, 500);
     } catch (error: unknown) {
       if (error instanceof ValidationError) {
         if (error?.name === "ValidationError") {

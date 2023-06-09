@@ -30,6 +30,7 @@ function RegisterModal({
   ) => {
     e && e.preventDefault();
     try {
+      await Validationschema.validate(input, { abortEarly: false });
       setIsLoading(true);
       await Validationschema.validate(input, { abortEarly: false });
       const registerResponse = await registerAccount(input);
