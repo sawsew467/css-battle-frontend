@@ -3,8 +3,12 @@ import { Img } from "react-image";
 import Leaderboard from "../Leaderboard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { decreaseTimer } from "../../redux/slices/room";
-import { compareResult } from "../../apis/room";
+import {
+  decreaseTimer,
+  increaseQuestionIndex,
+  resetTimer,
+} from "../../redux/slices/room";
+import { compareResult, submitQuestion } from "../../apis/room";
 import { showSnackbar } from "../../redux/slices/app";
 import SubmitComfirmModal from "../SubmitComfirmModal";
 
@@ -21,6 +25,7 @@ function Output({ codeEditor }: IProps) {
   const questionList = useSelector(
     (state: RootState) => state.room.questionList
   );
+  const room = useSelector((state: RootState) => state.room.room);
   const timer = useSelector((state: RootState) => state.room.timer);
   const isPlaying = useSelector((state: RootState) => state.room.isPlaying);
 
@@ -73,7 +78,7 @@ function Output({ codeEditor }: IProps) {
       const body = {
         questionId: currentQuestion.id,
         htmlCode: htmlCode,
-        time: 600 - timer,
+        time: 900 - timer,
       };
       const res = await compareResult(body, access_token);
       setMatchPercentage(res.data.data.point);
@@ -83,33 +88,26 @@ function Output({ codeEditor }: IProps) {
       setIsLoading(false);
     }
   };
-
+  const timeOut = async () => {
+    setIsSubmitting(true);
+    const access_token = localStorage.getItem("access_token");
+    const body = {
+      questionId: currentQuestion.id,
+      time: 900 - timer,
+      htmlCode: htmlCode,
+    };
+    await submitQuestion(body, room.roomCode, access_token);
+    dispatch(increaseQuestionIndex());
+    dispatch(resetTimer());
+    setIsSubmitting(false);
+    setIsShowConfirmModal(false);
+  };
   useEffect(() => {
     if (timer === 0) {
-      handleSubmit();
+      timeOut();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer]);
-  const handleSubmit = async () => {
-    if (!validateHtmlCode()) {
-      return;
-    }
-    try {
-      setIsSubmitting(true);
-      const access_token = localStorage.getItem("access_token");
-      const body = {
-        questionId: currentQuestion.id,
-        htmlCode: htmlCode,
-        time: 600 - timer,
-      };
-      const res = await compareResult(body, access_token);
-      setMatchPercentage(res.data.data.point);
-      setIsSubmitting(false);
-    } catch (error) {
-      console.log(error);
-      setIsSubmitting(false);
-    }
-  };
 
   const submitClick = async () => {
     if (!validateHtmlCode()) {
@@ -128,7 +126,7 @@ function Output({ codeEditor }: IProps) {
       const body = {
         questionId: currentQuestion.id,
         htmlCode: htmlCode,
-        time: 600 - timer,
+        time: 900 - timer,
       };
       const res = await compareResult(body, access_token);
       setMatchPercentage(res.data.data.point);
@@ -289,7 +287,7 @@ function Output({ codeEditor }: IProps) {
                 width="400px"
                 height="300px"
                 style={{
-                  background: "white",
+                  background: currentQuestion?.colors[0] ?? "white",
                   width: "400px",
                   height: "300px",
                   border: "0px",

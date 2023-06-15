@@ -14,9 +14,11 @@ function AddQuestion() {
   const [newColor, setNewColor] = useState<IState["color"]>("");
 
   const handleAddColor = () => {
-    const color = newColor;
-    color.replace("#", "");
-    setColors([...colors, color]);
+    if (newColor[0] === "#") {
+      setColors([...colors, newColor.substring(1)]);
+    } else {
+      setColors([...colors, newColor]);
+    }
     setNewColor("");
   };
   const handleDeleteColor = (pos: number) => {
@@ -36,6 +38,7 @@ function AddQuestion() {
       imageUrl,
       colors,
       difficulty,
+      collectionCode: "000000"
     };
     await addOneQuestion(newQuestion, access_token);
     setImageUrl("");

@@ -67,21 +67,18 @@ const initialState: RoomIState["init"] = {
   status: "OPEN",
   questionList: [],
   questionIndex: -1,
-  timer: 600,
+  timer: 900,
   isPlaying: false,
   leaderboard: [],
   summary: [],
-  htmlCode: `<body>
-  <div></div>
-</body>
-<style>
-  body {
-    background-color: #62374e;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-</style>`,
+  htmlCode: `<div></div>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+      background: #dd6b4d;
+    }
+  </style>`,
 };
 
 export const roomSlice = createSlice({
@@ -95,7 +92,7 @@ export const roomSlice = createSlice({
       state.status = "OPEN";
       state.leaderboard = [];
       state.isPlaying = false;
-      state.timer = 600;
+      state.timer = 900;
     },
     update: (state, action) => {
       state.room = action.payload;
@@ -107,7 +104,7 @@ export const roomSlice = createSlice({
       state.questionList = action.payload;
     },
     resetTimer: (state) => {
-      state.timer = 600;
+      state.timer = 900;
     },
     decreaseTimer: (state, action) => {
       state.timer = action.payload;

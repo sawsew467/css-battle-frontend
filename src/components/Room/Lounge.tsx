@@ -27,10 +27,11 @@ function Lounge() {
   const dispatch = useDispatch();
 
   const [options, setOptions] = useState<IState["options"]>({
-    numOfEasy: 2,
-    numOfMedium: 2,
+    numOfEasy: 1,
+    numOfMedium: 1,
     numOfHard: 1,
   });
+  const [collectionCode, setCollectionCode] = useState<string>("");
   const [isReady, setIsReady] = useState<boolean>(false);
   const [isShowSettings, setIsShowSettings] = useState<boolean>(false);
   const [players, setPlayers] = useState<RoomIState["players"]>([]);
@@ -91,11 +92,16 @@ function Lounge() {
   };
 
   const handleStartGame = async () => {
+    console.log(collectionCode);
+
     try {
       const access_token = localStorage.getItem("access_token");
       const body = {
         roomCode: room.roomCode,
-        options: options,
+        options: {
+          ...options,
+          collectionCode: collectionCode.length > 0 ? collectionCode : "000000",
+        },
       };
       await handleReady();
       await startGame(body, access_token);
@@ -117,7 +123,11 @@ function Lounge() {
       <div className="w-[100vw] h-[100vh] fixed z-50 bg-overlay flex justify-center items-center drop-shadow-2xl">
         <div className="relative flex flex-col min-w-[480px] bg-zinc-900 rounded-lg">
           {isShowSettings && (
-            <Settings setOptions={setOptions} options={options}></Settings>
+            <Settings
+              setOptions={setOptions}
+              options={options}
+              setCollectionCode={setCollectionCode}
+            ></Settings>
           )}
           <div className="relative bg-zinc-800 px-4 py-2 flex justify-between items-center rounded-tl-lg rounded-tr-lg">
             <p className="text-xl text-slate-300 font-bold text-center w-full">

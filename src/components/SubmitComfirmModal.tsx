@@ -45,14 +45,14 @@ function SubmitComfirmModal({
       );
       return;
     }
-    if (timer === 600) {
+    if (timer === 900) {
       return;
     }
     setIsSubmitting(true);
     const access_token = localStorage.getItem("access_token");
     const body = {
       questionId: currentQuestion.id,
-      time: 600 - timer,
+      time: 900 - timer,
       htmlCode: htmlCode,
     };
     await submitQuestion(body, room.roomCode, access_token);

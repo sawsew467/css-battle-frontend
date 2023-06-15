@@ -3,30 +3,27 @@ import { html } from "@codemirror/lang-html";
 import { githubDark } from "@uiw/codemirror-theme-github";
 import { useDispatch } from "react-redux";
 import { setHtmlCode } from "../../redux/slices/room";
+import { debounce } from "lodash";
 
 interface IProps {
   setCodeEditor: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const defaultValue = `<body>
-  <div></div>
-</body>
+const defaultValue = `<div></div>
 <style>
-  body {
-    background-color: #62374e;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  div {
+    width: 100px;
+    height: 100px;
+    background: #dd6b4d;
   }
 </style>`;
 
 function Editor({ setCodeEditor }: IProps) {
   const dispatch = useDispatch();
-
-  const handleOnChange = (val: string) => {
+  const handleOnChange = debounce((val: string) => {
     dispatch(setHtmlCode(val));
     setCodeEditor(val);
-  };
+  }, 300);
   return (
     <>
       <div className="flex-1 h-[calc(100vh-104px)] max-w-[calc(100vw-896px)] flex flex-col ">
