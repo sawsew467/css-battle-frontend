@@ -1,28 +1,13 @@
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { html } from "@codemirror/lang-html";
 import { githubDark } from "@uiw/codemirror-theme-github";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setHtmlCode } from "../../redux/slices/room";
 import { debounce } from "lodash";
-
-const defaultValue = `<body>
-<div></div>
-</body>
-<style>
-body {
-  margin: 0;
-  width: 400px;
-  height: 300px;
-  background: #1A090D;
-}
-div {
-  width: 200px;
-  height: 200px;
-  background: #ACE894;
-}
-</style>`;
+import { RootState } from "../../redux/store";
 
 function Editor() {
+  const htmlCode = useSelector((state: RootState) => state.room.htmlCode);
   const dispatch = useDispatch();
   const handleOnChange = debounce((val: string) => {
     dispatch(setHtmlCode(val));
@@ -40,7 +25,7 @@ function Editor() {
             width="100%"
             height="100%"
             onChange={(val) => handleOnChange(val)}
-            value={defaultValue}
+            value={htmlCode}
           />
         </div>
       </div>
