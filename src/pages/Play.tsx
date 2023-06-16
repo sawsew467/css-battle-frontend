@@ -24,22 +24,7 @@ function Play() {
   useEffect(() => {
     questionList.length > 0 && setIsShowCoundown(true);
   }, [questionList]);
-  const [codeEditor, setCodeEditor] = useState(`<body>
-  <div></div>
-</body>
-<style>
-  body {
-    margin: 0;
-    width: 400px;
-    height: 300px;
-    background: #1A090D;
-  }
-  div {
-    width: 200px;
-    height: 200px;
-    background: #ACE894;
-  }
-</style>`);
+  
   return (
     <>
       {questionIndex === questionList.length && <Summary></Summary>}
@@ -50,8 +35,8 @@ function Play() {
       <div className="flex flex-col h-[100vh] justify-between">
         <Header></Header>
         <div className="flex-1 flex flex-row">
-          <Editor setCodeEditor={setCodeEditor}></Editor>
-          <Output codeEditor={codeEditor}></Output>
+          <Editor></Editor>
+          <Output></Output>
           <Target></Target>
         </div>
         <Footer></Footer>

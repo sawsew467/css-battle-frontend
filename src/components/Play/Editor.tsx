@@ -5,10 +5,6 @@ import { useDispatch } from "react-redux";
 import { setHtmlCode } from "../../redux/slices/room";
 import { debounce } from "lodash";
 
-interface IProps {
-  setCodeEditor: React.Dispatch<React.SetStateAction<string>>;
-}
-
 const defaultValue = `<body>
 <div></div>
 </body>
@@ -26,11 +22,10 @@ div {
 }
 </style>`;
 
-function Editor({ setCodeEditor }: IProps) {
+function Editor() {
   const dispatch = useDispatch();
   const handleOnChange = debounce((val: string) => {
     dispatch(setHtmlCode(val));
-    // setCodeEditor(val);
   }, 300);
   return (
     <>

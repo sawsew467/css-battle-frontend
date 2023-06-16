@@ -12,11 +12,7 @@ import { compareResult, submitQuestion } from "../../apis/room";
 import { showSnackbar } from "../../redux/slices/app";
 import SubmitComfirmModal from "../SubmitComfirmModal";
 
-interface IProps {
-  codeEditor: string;
-}
-
-function Output({ codeEditor }: IProps) {
+function Output() {
   const htmlCode = useSelector((state: RootState) => state.room.htmlCode);
 
   const questionIndex = useSelector(
