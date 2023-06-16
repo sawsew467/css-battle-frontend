@@ -67,18 +67,26 @@ const initialState: RoomIState["init"] = {
   status: "OPEN",
   questionList: [],
   questionIndex: -1,
-  timer: 900,
+  timer: 1200,
   isPlaying: false,
   leaderboard: [],
   summary: [],
-  htmlCode: `<div></div>
-  <style>
-    div {
-      width: 100px;
-      height: 100px;
-      background: #dd6b4d;
-    }
-  </style>`,
+  htmlCode: `<body>
+  <div></div>
+</body>
+<style>
+  body {
+    margin: 0;
+    width: 400px;
+    height: 300px;
+    background: #1A090D;
+  }
+  div {
+    width: 200px;
+    height: 200px;
+    background: #ACE894;
+  }
+</style>`,
 };
 
 export const roomSlice = createSlice({
@@ -92,7 +100,7 @@ export const roomSlice = createSlice({
       state.status = "OPEN";
       state.leaderboard = [];
       state.isPlaying = false;
-      state.timer = 900;
+      state.timer = 1200;
     },
     update: (state, action) => {
       state.room = action.payload;
@@ -104,13 +112,29 @@ export const roomSlice = createSlice({
       state.questionList = action.payload;
     },
     resetTimer: (state) => {
-      state.timer = 900;
+      state.timer = 1200;
     },
     decreaseTimer: (state, action) => {
       state.timer = action.payload;
     },
     increaseQuestionIndex: (state) => {
       state.questionIndex++;
+      state.htmlCode = `<body>
+  <div></div>
+</body>
+<style>
+  body {
+    margin: 0;
+    width: 400px;
+    height: 300px;
+    background: #1A090D;
+  }
+  div {
+    width: 200px;
+    height: 200px;
+    background: #ACE894;
+  }
+</style>`;
     },
     changeIsPlaying: (state, action) => {
       state.isPlaying = action.payload;

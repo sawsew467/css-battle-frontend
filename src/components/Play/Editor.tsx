@@ -9,20 +9,28 @@ interface IProps {
   setCodeEditor: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const defaultValue = `<div></div>
+const defaultValue = `<body>
+<div></div>
+</body>
 <style>
-  div {
-    width: 100px;
-    height: 100px;
-    background: #dd6b4d;
-  }
+body {
+  margin: 0;
+  width: 400px;
+  height: 300px;
+  background: #1A090D;
+}
+div {
+  width: 200px;
+  height: 200px;
+  background: #ACE894;
+}
 </style>`;
 
 function Editor({ setCodeEditor }: IProps) {
   const dispatch = useDispatch();
   const handleOnChange = debounce((val: string) => {
     dispatch(setHtmlCode(val));
-    setCodeEditor(val);
+    // setCodeEditor(val);
   }, 300);
   return (
     <>

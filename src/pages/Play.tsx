@@ -24,14 +24,22 @@ function Play() {
   useEffect(() => {
     questionList.length > 0 && setIsShowCoundown(true);
   }, [questionList]);
-  const [codeEditor, setCodeEditor] = useState(`<div></div>
-  <style>
-    div {
-      width: 100px;
-      height: 100px;
-      background: #dd6b4d;
-    }
-  </style>`);
+  const [codeEditor, setCodeEditor] = useState(`<body>
+  <div></div>
+</body>
+<style>
+  body {
+    margin: 0;
+    width: 400px;
+    height: 300px;
+    background: #1A090D;
+  }
+  div {
+    width: 200px;
+    height: 200px;
+    background: #ACE894;
+  }
+</style>`);
   return (
     <>
       {questionIndex === questionList.length && <Summary></Summary>}

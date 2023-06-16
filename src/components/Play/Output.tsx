@@ -78,7 +78,7 @@ function Output({ codeEditor }: IProps) {
       const body = {
         questionId: currentQuestion.id,
         htmlCode: htmlCode,
-        time: 900 - timer,
+        time: 1200 - timer,
       };
       const res = await compareResult(body, access_token);
       setMatchPercentage(res.data.data.point);
@@ -93,7 +93,7 @@ function Output({ codeEditor }: IProps) {
     const access_token = localStorage.getItem("access_token");
     const body = {
       questionId: currentQuestion.id,
-      time: 900 - timer,
+      time: 1200 - timer,
       htmlCode: htmlCode,
     };
     await submitQuestion(body, room.roomCode, access_token);
@@ -126,7 +126,7 @@ function Output({ codeEditor }: IProps) {
       const body = {
         questionId: currentQuestion.id,
         htmlCode: htmlCode,
-        time: 900 - timer,
+        time: 1200 - timer,
       };
       const res = await compareResult(body, access_token);
       setMatchPercentage(res.data.data.point);
@@ -281,7 +281,7 @@ function Output({ codeEditor }: IProps) {
             >
               <iframe
                 id="myIframe"
-                srcDoc={codeEditor}
+                srcDoc={htmlCode}
                 title="Preview"
                 sandbox="allow-same-origin"
                 width="400px"
