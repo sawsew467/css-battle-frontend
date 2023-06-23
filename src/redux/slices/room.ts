@@ -67,7 +67,7 @@ const initialState: RoomIState["init"] = {
   status: "OPEN",
   questionList: [],
   questionIndex: -1,
-  timer: 1200,
+  timer: 900,
   isPlaying: false,
   leaderboard: [],
   summary: [],
@@ -100,7 +100,7 @@ export const roomSlice = createSlice({
       state.status = "OPEN";
       state.leaderboard = [];
       state.isPlaying = false;
-      state.timer = 1200;
+      state.timer = 900;
     },
     update: (state, action) => {
       state.room = action.payload;
@@ -112,7 +112,7 @@ export const roomSlice = createSlice({
       state.questionList = action.payload;
     },
     resetTimer: (state) => {
-      state.timer = 1200;
+      state.timer = 900;
     },
     decreaseTimer: (state, action) => {
       state.timer = action.payload;

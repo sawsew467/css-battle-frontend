@@ -74,11 +74,13 @@ function Output() {
       const body = {
         questionId: currentQuestion.id,
         htmlCode: htmlCode,
-        time: 1200 - timer,
+        time: 900 - timer,
       };
       const res = await compareResult(body, access_token);
       setMatchPercentage(res.data.data.point);
       setIsLoading(false);
+      console.log(res);
+      
     } catch (error) {
       console.log(error);
       setIsLoading(false);
@@ -89,7 +91,7 @@ function Output() {
     const access_token = localStorage.getItem("access_token");
     const body = {
       questionId: currentQuestion.id,
-      time: 1200 - timer,
+      time: 900 - timer,
       htmlCode: htmlCode,
     };
     await submitQuestion(body, room.roomCode, access_token);
@@ -122,7 +124,7 @@ function Output() {
       const body = {
         questionId: currentQuestion.id,
         htmlCode: htmlCode,
-        time: 1200 - timer,
+        time: 900 - timer,
       };
       const res = await compareResult(body, access_token);
       setMatchPercentage(res.data.data.point);
